@@ -7,7 +7,7 @@ assert(launcher.includes('This computer'));
 assert(launcher.includes('id="localFlow"'));
 assert(launcher.includes('id="localDownload"'));
 assert(js.includes("goProvider('local')"));
-assert(js.includes("h==='#local'"));
+assert(/h\s*===\s*['\"]#local['\"]/.test(js));
 assert(cfg.includes('Eve-beta-local-relay-kit.zip'));
 assert(server.includes("const HOST=process.env.HOST||'127.0.0.1';"));
 assert(guide.includes('participant devices never connect to the researcher machine'));
