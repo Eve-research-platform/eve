@@ -9,7 +9,7 @@ assert(!fs.existsSync(path.join(root,'factory')),'legacy /factory directory shou
 for(const f of ['index.html','app.js','styles.css','sw.js','eve-deployment.js','cloud-storage.js']) assert(fs.existsSync(path.join(root,'app',f)),`missing app/${f}`);
 assert(read('app','index.html').includes('<script src="app.js"></script>'));
 assert(server.includes("const STATIC_ROOT=path.join(REPO_ROOT,'app');"));
-assert(js.includes('https://deploy.cloud.run'));assert(config.includes('ghcr.io/OWNER/REPOSITORY:beta'));
+assert(js.includes('https://console.cloud.google.com/cloudshell?show=terminal'));assert(js.includes('googleBootstrapCommand'));assert(config.includes('ghcr.io/OWNER/REPOSITORY:beta'));
 assert(pages.includes('stage-deployment-site.sh'));assert(pages.includes('path: _site'));assert(!pages.includes('path: factory'));
 assert(docker.includes('CMD ["node","server.js"]'));
 console.log('v62.3 canonical root launcher layout tests passed');

@@ -1,0 +1,11 @@
+'use strict';
+const assert=require('assert'),fs=require('fs'),path=require('path');
+const root=path.join(__dirname,'..'),read=(...p)=>fs.readFileSync(path.join(root,...p),'utf8');
+const html=read('index.html'),js=read('deployment.js'),css=read('deployment.css'),server=read('server.js');
+for(const token of ['deploymentWizard','wizardContinue','wizardEveUrl','wizardVerify','wizardReadyPanel','wizardOpenEve','wizardGooglePanel','wizardGoogleCommand','wizardCopyGoogleCommand'])assert(html.includes(token),`missing wizard UI ${token}`);
+for(const token of ['beginWizard','verifyEve','/api/readiness','setWizardStep','WIZARD_STORAGE_KEY','googleBootstrapCommand','cloudshell launch-tutorial'])assert(js.includes(token),`missing guided deployment behavior ${token}`);
+assert(js.includes("window.addEventListener('focus'"),'wizard should respond when researcher returns from cloud provider');
+assert(css.includes('.wizard-progress')&&css.includes('.wizard-step.active')&&css.includes('.success-panel'),'wizard styling missing');
+assert(server.includes("'Access-Control-Allow-Origin':'*'"),'readiness must be callable by the canonical Eve deployment page');
+assert(server.includes("checks:readiness.checks"),'readiness should expose safe deployment checks for the wizard');
+console.log('v63.1 guided deployment wizard contract passed');

@@ -1,12 +1,18 @@
-# Google Cloud — full Eve v61
+# Google Cloud — guided Eve deployment
 
-Run from Google Cloud Shell:
+For researchers, use the public Eve Beta/Stable launcher and choose **Google Cloud → Start guided Google setup**.
+
+That route opens a normal Google Cloud Shell session, launches Eve's in-console walkthrough, and guides project selection, billing, API enablement and deployment.
+
+## Advanced/manual deployment
+
+Platform teams can run the underlying installer directly from Google Cloud Shell after checking out the desired Eve revision:
 
 ```bash
 bash deploy/google/deploy.sh
 ```
 
-The script now creates a concurrent departmental Eve stack:
+The installer creates:
 
 - Cloud SQL PostgreSQL 16 — operational control plane;
 - Cloud Storage — durable encrypted research storage;
@@ -15,18 +21,6 @@ The script now creates a concurrent departmental Eve stack:
 - Artifact Registry + Cloud Build;
 - dedicated runtime service account.
 
-No Google Drive OAuth client is required for the default research workflow.
+No Google Drive OAuth client is required for the default research workflow. Google Drive/Shared Drive remains an optional integration.
 
-Google Drive/Shared Drive remains an optional integration.
-
-## Concurrency
-
-Accounts, sessions, collaboration, Panel state and integration configuration use PostgreSQL.
-
-Study/response/recording operations are coordinated with PostgreSQL advisory locks.
-
-The deployment disables Cloud Storage FUSE metadata/stat/type caches to reduce stale cross-instance filesystem views.
-
-## Cost note
-
-v61 adds Cloud SQL, so the deployment has a higher minimum cloud cost than v60.x. That is the trade-off for a properly concurrent operational control plane.
+If Google displays **Authorize Cloud Shell**, approve it before running the installer.

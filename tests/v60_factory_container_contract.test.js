@@ -47,9 +47,10 @@ assert(factory.includes('This computer'));
 assert(!factoryJs.includes('crypto.getRandomValues'));
 assert.equal(azure.parameters.connectorSecret.defaultValue,'[newGuid()]');
 assert(azure.parameters.databaseAdminPassword.defaultValue.includes('newGuid()'));
-assert(factoryJs.includes('deploy.cloud.run'));
-assert(factoryJs.includes('shell.cloud.google.com/cloudshell/editor'));
-assert(factory.includes('Advanced fallback: Cloud Shell'));
+assert(!factoryJs.includes('deploy.cloud.run'));
+assert(factoryJs.includes('console.cloud.google.com/cloudshell?show=terminal'));
+assert(factoryJs.includes('cloudshell launch-tutorial'));
+assert(factory.includes('Advanced: deployment instructions'));
 assert(factoryJs.includes('portal.azure.com/#create/Microsoft.Template/uri/'));
 assert(factoryCfg.includes('ghcr.io/OWNER/REPOSITORY:beta'));
 

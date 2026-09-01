@@ -55,9 +55,9 @@
     <section id="googleFlow" class="provider-flow hidden" aria-labelledby="googleFlowTitle">
       <button class="back-link" data-back-organisation>← Change cloud</button>
       <div class="provider-flow-head"><span class="provider-mark large">G</span><div><div class="eyebrow">GOOGLE CLOUD</div><h2 id="googleFlowTitle">Create Eve on Google Cloud</h2></div></div>
-      <p>Sign in to Google, choose the target project and region, and provide the first Eve administrator details. Eve provisions the application, PostgreSQL, storage and secrets.</p>
+      <p>Eve opens a normal Google Cloud Shell session and guides you through selecting a project, checking billing and creating the full Eve stack. No local tools are needed.</p>
       <div class="creates-grid"><div><b>Cloud Run</b><small>Full Eve application</small></div><div><b>Cloud SQL</b><small>PostgreSQL control plane</small></div><div><b>Cloud Storage</b><small>Organisation research storage</small></div><div><b>Secret Manager</b><small>Deployment credentials</small></div></div>
-      <div class="flow-actions"><a id="googleDeploy" class="primary" target="_blank" rel="noopener">Create Eve on Google</a><a id="googleFallback" class="secondary-link" target="_blank" rel="noopener">Advanced fallback: Cloud Shell</a></div>
+      <div class="flow-actions"><a id="googleDeploy" class="primary" target="_blank" rel="noopener">Start guided Google setup</a><a id="googleFallback" class="secondary-link" target="_blank" rel="noopener">Advanced: deployment instructions</a></div>
     </section>
 
     <section id="azureFlow" class="provider-flow hidden" aria-labelledby="azureFlowTitle">
@@ -68,6 +68,48 @@
         <article class="azure-profile private-profile"><div class="profile-head"><span class="profile-badge">Private network</span><span class="profile-fit">Government / restricted</span></div><h3>Private Azure</h3><p>Internal-only Eve with private PostgreSQL, private storage endpoints and private DNS.</p><ul><li>Internal Container Apps environment</li><li>VNet-integrated PostgreSQL</li><li>Azure Files private endpoint</li><li>No public Eve endpoint</li></ul><a id="azurePrivateDeploy" class="primary" target="_blank" rel="noopener">Create private Azure Eve</a></article>
       </div>
       <div class="flow-note"><b>Private network:</b> researchers need a route into the Azure VNet through their organisation's network, VPN, ExpressRoute or peering.</div>
+    </section>
+
+
+    <section id="deploymentWizard" class="provider-flow deployment-wizard hidden" aria-labelledby="deploymentWizardTitle">
+      <button class="back-link" id="wizardBack">← Back to deployment options</button>
+      <div class="provider-flow-head"><span class="provider-mark large" id="wizardProviderMark">O</span><div><div class="eyebrow" id="wizardEyebrow">DEPLOYMENT</div><h2 id="deploymentWizardTitle">Set up your Eve</h2></div></div>
+      <p id="wizardIntro">Eve will keep this page open while your cloud provider completes the infrastructure setup.</p>
+
+      <div class="wizard-progress" aria-label="Deployment progress">
+        <div class="wizard-step done" data-wizard-step="launch"><span>1</span><div><b>Start cloud setup</b><small id="wizardLaunchText">Deployment opened.</small></div></div>
+        <div class="wizard-step active" data-wizard-step="provider"><span>2</span><div><b id="wizardProviderStepTitle">Complete cloud setup</b><small id="wizardProviderText">Finish the provider form in the tab Eve opened.</small></div></div>
+        <div class="wizard-step" data-wizard-step="verify"><span>3</span><div><b>Verify your Eve</b><small>Eve will check the deployed service directly.</small></div></div>
+        <div class="wizard-step" data-wizard-step="ready"><span>4</span><div><b>Ready</b><small>Open Eve and sign in as the first administrator.</small></div></div>
+      </div>
+
+      <div class="wizard-panel" id="wizardProviderPanel">
+        <div class="wizard-status"><span class="status-dot waiting"></span><div><b id="wizardStatusTitle">Cloud setup is open</b><small id="wizardStatusDetail">Complete the setup in the new tab. This Eve page will stay here.</small></div></div>
+        <div class="wizard-resource-grid" id="wizardResourceGrid"></div>
+        <div id="wizardGooglePanel" class="google-guided-panel hidden">
+          <div class="google-guided-step"><span>1</span><div><b>Open Cloud Shell</b><small>Eve opens Google's normal authenticated browser terminal. If Google asks you to authorize Cloud Shell, choose Authorize.</small></div></div>
+          <div class="google-guided-step"><span>2</span><div><b>Paste the Eve setup command</b><small>The command is copied automatically when possible. It downloads this Beta and opens the guided Eve walkthrough.</small></div></div>
+          <pre class="google-command"><code id="wizardGoogleCommand"></code></pre>
+          <div class="flow-actions compact"><button id="wizardCopyGoogleCommand" class="secondary-button" type="button">Copy setup command</button><small id="wizardGoogleCopyStatus" class="copy-status" aria-live="polite">Paste the command into Cloud Shell and press Enter.</small></div>
+          <div class="google-guided-step"><span>3</span><div><b>Follow Google's Eve walkthrough</b><small>Select or create the project, confirm billing, enable the required services, then run Create Eve. The walkthrough displays the final Eve URL when complete.</small></div></div>
+        </div>
+        <div class="flow-actions"><a id="wizardReopen" class="secondary-link" target="_blank" rel="noopener">Re-open cloud setup</a><button id="wizardContinue" class="primary button-primary" type="button">Cloud says deployment is complete</button></div>
+      </div>
+
+      <div class="wizard-panel hidden" id="wizardVerifyPanel">
+        <div class="wizard-status"><span class="status-dot checking"></span><div><b>Verify the deployed Eve</b><small>Copy the final Eve HTTPS address shown by Google or Azure and paste it below.</small></div></div>
+        <label class="wizard-url-label" for="wizardEveUrl">Eve address</label>
+        <div class="wizard-url-row"><input id="wizardEveUrl" type="url" inputmode="url" autocomplete="url" placeholder="https://your-eve.example"><button id="wizardPaste" class="secondary-button" type="button">Paste</button><button id="wizardVerify" class="primary button-primary" type="button">Check Eve</button></div>
+        <div id="wizardVerifyMessage" class="wizard-message" aria-live="polite">Eve will automatically advance when the readiness check passes.</div>
+        <div id="wizardChecks" class="wizard-checks hidden"></div>
+      </div>
+
+      <div class="wizard-panel success-panel hidden" id="wizardReadyPanel">
+        <div class="wizard-status"><span class="status-dot ready"></span><div><b>Your Eve is ready</b><small>The application, authentication, durable storage and database readiness checks passed.</small></div></div>
+        <div class="flow-actions"><a id="wizardOpenEve" class="primary" target="_blank" rel="noopener">Open Eve</a><button id="wizardStartAnother" class="secondary-button" type="button">Set up another Eve</button></div>
+      </div>
+
+      <details class="advanced-details"><summary>Advanced deployment help</summary><p>If your organisation blocks the browser flow, use the advanced fallback or deployment kit instead. This does not change where Eve or research data are hosted.</p><div class="flow-actions"><a id="wizardAdvanced" class="secondary-link" target="_blank" rel="noopener">Open advanced fallback</a></div></details>
     </section>
 
     <section id="localFlow" class="provider-flow hidden" aria-labelledby="localFlowTitle">

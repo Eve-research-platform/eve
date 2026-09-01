@@ -1,0 +1,14 @@
+'use strict';
+const assert=require('assert'),fs=require('fs'),path=require('path');
+const root=path.join(__dirname,'..'),read=(...p)=>fs.readFileSync(path.join(root,...p),'utf8');
+const js=read('deployment.js'),html=read('index.html'),tutorial=read('deploy','google','tutorial.md'),deploy=read('deploy','google','deploy.sh'),docs=read('deploy','google','ONE_CLICK.md');
+assert(!js.includes('https://deploy.cloud.run'),'retired Cloud Run Button must not be the Google launcher');
+assert(js.includes('https://console.cloud.google.com/cloudshell?show=terminal'),'Google should open the normal Cloud Shell');
+assert(js.includes('git clone --depth 1 --single-branch --branch'),'Eve should generate the explicit bootstrap clone command');
+assert(js.includes('cloudshell launch-tutorial'),'bootstrap should launch the Eve Google walkthrough');
+assert(html.includes('Start guided Google setup'));assert(html.includes('wizardGoogleCopyStatus'));
+assert(tutorial.includes('<walkthrough-project-setup billing="true"></walkthrough-project-setup>'));
+assert(tutorial.includes('<walkthrough-enable-apis'));assert(tutorial.includes('bash deploy/google/deploy.sh'));
+assert(deploy.includes('GOOGLE_CLOUD_PROJECT'));assert(deploy.includes('Cloud Shell is not authorized yet'));
+assert(docs.includes('normal Google Cloud Shell session'));assert(docs.includes('temporary environment without automatic access'));
+console.log('v63.2 guided Google Cloud Shell deployment contract passed');

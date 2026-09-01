@@ -4,7 +4,7 @@ const root=path.join(__dirname,'..'),read=(...p)=>fs.readFileSync(path.join(root
 const pkg=JSON.parse(read('package.json')),factory=read('deployment.js'),html=read('index.html'),azure=JSON.parse(read('deploy','azure','azuredeploy.json')),docs=read('deploy','azure','ONE_CLICK.md');
 assert.equal(pkg.version,'63.0.0');
 for(const token of ['chooseOrganisation','chooseGoogle','chooseAzure','organisationFlow','googleFlow','azureFlow','Change cloud','Create Eve on Google','Create standard Azure Eve'])assert(html.includes(token),`missing deployment launcher UI ${token}`);
-assert(factory.includes("h==='#google'"));assert(factory.includes("h==='#azure'"));assert(factory.includes('https://deploy.cloud.run'));assert(factory.includes('https://portal.azure.com/#create/Microsoft.Template/uri/'));
+assert(/h\s*===\s*['\"]#google['\"]/.test(factory));assert(/h\s*===\s*['\"]#azure['\"]/.test(factory));assert(factory.includes('https://console.cloud.google.com/cloudshell?show=terminal'));assert(factory.includes('cloudshell launch-tutorial'));assert(factory.includes('https://portal.azure.com/#create/Microsoft.Template/uri/'));
 assert(!html.includes('Temporary first-admin password</span><div><input'));assert(!factory.includes('makeSecrets'));
 const p=azure.parameters;
 assert.equal(azure.contentVersion,'1.1.0.0');assert.equal(p.containerImage.defaultValue,'ghcr.io/OWNER/REPOSITORY:beta');

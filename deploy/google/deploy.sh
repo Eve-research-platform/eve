@@ -12,10 +12,12 @@ DATA_MOUNT="/data/eve"
 say(){ printf "\n\033[1;35m%s\033[0m\n" "$*"; }
 die(){ printf "\nEve deployment stopped: %s\n" "$*" >&2; exit 1; }
 command -v gcloud >/dev/null 2>&1 || die "Google Cloud Shell/gcloud is required."
-PROJECT_ID="${EVE_PROJECT_ID:-$(gcloud config get-value project 2>/dev/null || true)}"
+PROJECT_ID="${EVE_PROJECT_ID:-${GOOGLE_CLOUD_PROJECT:-$(gcloud config get-value project 2>/dev/null || true)}}"
 if [[ -z "${PROJECT_ID}" || "${PROJECT_ID}" == "(unset)" ]]; then read -r -p "Google Cloud project ID: " PROJECT_ID; fi
 [[ -n "${PROJECT_ID}" ]] || die "A Google Cloud project is required."
 gcloud config set project "${PROJECT_ID}" >/dev/null
+ACTIVE_ACCOUNT="$(gcloud auth list --filter=status:ACTIVE --format='value(account)' 2>/dev/null | head -n1 || true)"
+[[ -n "${ACTIVE_ACCOUNT}" ]] || die "Cloud Shell is not authorized yet. Approve Google's Authorize Cloud Shell prompt, then run the deployment again."
 ACCOUNT="$(gcloud config get-value account 2>/dev/null || true)"
 DEFAULT_EMAIL="${EVE_BOOTSTRAP_EMAIL:-${ACCOUNT}}"
 read -r -p "First Eve admin email [${DEFAULT_EMAIL}]: " BOOTSTRAP_EMAIL
