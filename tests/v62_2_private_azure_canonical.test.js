@@ -8,7 +8,7 @@ const priv=JSON.parse(read('deploy','azure','azuredeploy-private.json'));
 const privateDocs=read('deploy','azure','PRIVATE_ONE_CLICK.md'),canonical=read('CANONICAL_PUBLIC_EVE.md'),setter=read('scripts','set-canonical-repository.js'),pages=read('.github','workflows','publish-beta.yml');
 assert.equal(pkg.version,'63.0.0');
 for(const token of ['azureStandardDeploy','azurePrivateDeploy','Standard Azure','Private Azure','Private network']) assert(html.includes(token),`missing launcher Azure profile UI: ${token}`);
-assert(cfg.includes('azurePrivateTemplatePath'));assert(factory.includes("cfg.azurePrivateTemplatePath||'deploy/azure/azuredeploy-private.json'"));
+assert(cfg.includes('azurePrivateTemplatePath'));assert(/cfg\.azurePrivateTemplatePath\s*\|\|\s*['\"]deploy\/azure\/azuredeploy-private\.json['\"]/.test(factory));
 assert.equal(standard.parameters.containerImage.defaultValue,'ghcr.io/OWNER/REPOSITORY:beta');
 const standardApp=standard.resources.find(r=>r.type==='Microsoft.App/containerApps');
 assert(standardApp.properties.template.containers[0].env.some(x=>x.name==='EVE_AZURE_NETWORK_PROFILE'&&x.value==='standard'));
