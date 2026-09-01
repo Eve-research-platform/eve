@@ -1,0 +1,14 @@
+/* Deployment capability presentation · v59.2 */
+.add-option.unsupported{opacity:.52;cursor:not-allowed;background:#f6f4f7}
+.add-option.unsupported:hover{transform:none;border-color:var(--eve-border)}
+.deployment-capability-banner{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:18px;border-left:4px solid var(--eve-plum-500)}
+.deployment-capability-banner h3{margin:2px 0 5px}
+.deployment-capability-banner p{margin:0;max-width:760px;color:var(--eve-secondary)}
+.deployment-capability-card.unavailable{border-style:dashed;background:#faf9fb}
+.deployment-capability-card.unavailable .settings-card-icon{background:#efedf1;color:#746b79}
+.deployment-capability-note{margin:12px 0}
+#app[data-deployment="google-workspace"] .global-ai-card,
+#app[data-deployment="google-workspace"] .global-email-card,
+#app[data-deployment="google-workspace"] .study-ai-card,
+#app[data-deployment="google-workspace"] .global-team-card{display:none!important}
+@media(max-width:720px){.deployment-capability-banner{align-items:flex-start;flex-direction:column}.deployment-capability-banner .btn{width:100%}}

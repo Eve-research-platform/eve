@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Get Eve</title>
+  <link rel="stylesheet" href="deployment.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="brand"><span>E</span><b>Eve</b><em id="channelBadge">Beta</em></header>
+
+    <section class="hero">
+      <div class="eyebrow" id="channelEyebrow">EVE BETA</div>
+      <h1>Create your Eve.</h1>
+      <p>Run Eve in your organisation's cloud or on this computer. The setup keeps the running service and research data under your organisation's control.</p>
+      <div class="trust-row"><span>✓ Self-hosted</span><span>✓ Organisation-owned</span><span>✓ No Eve hosting account</span><span>✓ Portable research</span></div>
+    </section>
+
+    <section id="configWarning" class="notice warning hidden">
+      <b>This local copy is not connected to a canonical GitHub repository.</b>
+      <span>Published Beta and Stable pages configure this automatically. Maintainers can still use the manual canonical-repository tool for offline distributions.</span>
+    </section>
+
+    <section id="installChoice" class="choice-stage" aria-labelledby="installChoiceTitle">
+      <div class="choice-heading">
+        <div class="eyebrow">STEP 1 OF 2</div>
+        <h2 id="installChoiceTitle">Where should Eve run?</h2>
+        <p>You only need to choose between organisation infrastructure and this computer. Eve handles the technical setup behind each route.</p>
+      </div>
+      <div class="choice-grid primary-choice-grid">
+        <button class="cloud-choice featured-choice" id="chooseOrganisation" data-install="organisation" aria-controls="organisationFlow">
+          <span class="provider-mark">O</span>
+          <span class="choice-copy"><b>Your organisation's cloud</b><small>Recommended for shared departmental Eve</small></span>
+          <span class="choice-arrow" aria-hidden="true">→</span>
+        </button>
+        <button class="cloud-choice local-choice" id="chooseLocal" data-install="local" aria-controls="localFlow">
+          <span class="provider-mark">L</span>
+          <span class="choice-copy"><b>This computer</b><small>Local Eve + encrypted participant relay</small></span>
+          <span class="choice-arrow" aria-hidden="true">→</span>
+        </button>
+      </div>
+      <p class="choice-help">Beta testers: choose the option your organisation would realistically use. You do not need GitHub, Node commands or deployment scripts.</p>
+    </section>
+
+    <section id="organisationFlow" class="provider-flow hidden" aria-labelledby="organisationTitle">
+      <button class="back-link" data-back-home>← Change install option</button>
+      <div class="provider-flow-head"><span class="provider-mark large">O</span><div><div class="eyebrow">ORGANISATION CLOUD · STEP 2 OF 2</div><h2 id="organisationTitle">Which cloud does your organisation use?</h2></div></div>
+      <div class="choice-grid provider-grid">
+        <button class="cloud-choice" id="chooseGoogle" data-provider="google" aria-controls="googleFlow"><span class="provider-mark">G</span><span class="choice-copy"><b>Google Cloud</b><small>Cloud Run · PostgreSQL · organisation storage</small></span><span class="choice-arrow">→</span></button>
+        <button class="cloud-choice" id="chooseAzure" data-provider="azure" aria-controls="azureFlow"><span class="provider-mark">M</span><span class="choice-copy"><b>Microsoft Azure</b><small>Standard or private government network</small></span><span class="choice-arrow">→</span></button>
+      </div>
+    </section>
+
+    <section id="googleFlow" class="provider-flow hidden" aria-labelledby="googleFlowTitle">
+      <button class="back-link" data-back-organisation>← Change cloud</button>
+      <div class="provider-flow-head"><span class="provider-mark large">G</span><div><div class="eyebrow">GOOGLE CLOUD</div><h2 id="googleFlowTitle">Create Eve on Google Cloud</h2></div></div>
+      <p>Sign in to Google, choose the target project and region, and provide the first Eve administrator details. Eve provisions the application, PostgreSQL, storage and secrets.</p>
+      <div class="creates-grid"><div><b>Cloud Run</b><small>Full Eve application</small></div><div><b>Cloud SQL</b><small>PostgreSQL control plane</small></div><div><b>Cloud Storage</b><small>Organisation research storage</small></div><div><b>Secret Manager</b><small>Deployment credentials</small></div></div>
+      <div class="flow-actions"><a id="googleDeploy" class="primary" target="_blank" rel="noopener">Create Eve on Google</a><a id="googleFallback" class="secondary-link" target="_blank" rel="noopener">Advanced fallback: Cloud Shell</a></div>
+    </section>
+
+    <section id="azureFlow" class="provider-flow hidden" aria-labelledby="azureFlowTitle">
+      <button class="back-link" data-back-organisation>← Change cloud</button>
+      <div class="provider-flow-head"><span class="provider-mark large">M</span><div><div class="eyebrow">MICROSOFT AZURE</div><h2 id="azureFlowTitle">Choose the Azure security profile</h2></div></div>
+      <div class="azure-profile-grid">
+        <article class="azure-profile"><div class="profile-head"><span class="profile-badge">Standard</span><span class="profile-fit">Recommended</span></div><h3>Standard Azure</h3><p>Shared departmental Eve with a normal HTTPS address and managed Azure services.</p><ul><li>Public Eve HTTPS endpoint</li><li>Managed PostgreSQL</li><li>Azure Files storage</li><li>No VNet setup</li></ul><a id="azureStandardDeploy" class="primary" target="_blank" rel="noopener">Create standard Azure Eve</a></article>
+        <article class="azure-profile private-profile"><div class="profile-head"><span class="profile-badge">Private network</span><span class="profile-fit">Government / restricted</span></div><h3>Private Azure</h3><p>Internal-only Eve with private PostgreSQL, private storage endpoints and private DNS.</p><ul><li>Internal Container Apps environment</li><li>VNet-integrated PostgreSQL</li><li>Azure Files private endpoint</li><li>No public Eve endpoint</li></ul><a id="azurePrivateDeploy" class="primary" target="_blank" rel="noopener">Create private Azure Eve</a></article>
+      </div>
+      <div class="flow-note"><b>Private network:</b> researchers need a route into the Azure VNet through their organisation's network, VPN, ExpressRoute or peering.</div>
+    </section>
+
+    <section id="localFlow" class="provider-flow hidden" aria-labelledby="localFlowTitle">
+      <button class="back-link" data-back-home>← Change install option</button>
+      <div class="provider-flow-head"><span class="provider-mark large">L</span><div><div class="eyebrow">THIS COMPUTER · STEP 2 OF 2</div><h2 id="localFlowTitle">Download Eve for this computer</h2></div></div>
+      <p>Eve runs locally on Windows, macOS or Linux. Research can sync to approved SharePoint or Google Drive, while a small Cloudflare relay handles external participant traffic without exposing the researcher's machine.</p>
+      <div class="creates-grid local-creates"><div><b>Local Eve</b><small>Researcher workspace runs on this computer</small></div><div><b>Organisation storage</b><small>SharePoint or Google Drive durable encrypted copy</small></div><div><b>Temporary relay</b><small>Encrypted participant mailbox only</small></div><div><b>Localhost only</b><small>No inbound participant connection to the laptop</small></div></div>
+      <div class="flow-actions"><a id="localDownload" class="primary" download>Download Eve</a><a id="localGuide" class="secondary-link" target="_blank" rel="noopener">Setup guide</a></div>
+      <div class="local-install-steps"><div><span>1</span><b>Download and unzip</b><small>Keep Eve somewhere approved.</small></div><div><span>2</span><b>Open Eve</b><small>Use the Windows, macOS or Linux launcher.</small></div><div><span>3</span><b>Connect storage</b><small>Choose approved SharePoint or Google Drive.</small></div><div><span>4</span><b>Connect the relay</b><small>Eve guides you through Cloudflare login and testing.</small></div></div>
+    </section>
+
+    <section class="how"><div class="eyebrow">WHAT BETA MEANS</div><div class="steps"><div><span>1</span><b>One link</b><small>Researchers start from this page, not GitHub.</small></div><div><span>2</span><b>Self-service</b><small>Cloud setup happens behind the browser flow.</small></div><div><span>3</span><b>Your infrastructure</b><small>Eve runs under the researcher's organisation.</small></div><div><span>4</span><b>Easy updates</b><small>Beta changes are published automatically from main.</small></div></div></section>
+
+    <footer><span id="releaseLabel"></span><span id="buildLabel"></span></footer>
+  </main>
+  <script src="deployment-config.js"></script>
+  <script src="deployment.js"></script>
+</body>
+</html>

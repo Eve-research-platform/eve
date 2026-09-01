@@ -1,0 +1,13 @@
+'use strict';
+const assert=require('assert'),fs=require('fs'),path=require('path');
+const root=path.join(__dirname,'..'),read=(...p)=>fs.readFileSync(path.join(root,...p),'utf8');
+const code=read('google-workspace','Code.gs'),launcher=read('google-workspace','Launcher.html'),guide=read('google-workspace','TEMPLATE_PUBLISHING.md');
+assert(code.includes("const EVE_VERSION = '59.2.0'"));
+assert(code.includes("EVE_UPDATE_MANIFEST_URL"));
+assert(code.includes('function eveCheckForUpdates()'));
+assert(code.includes('function compareVersions_'));
+assert(launcher.includes('Check for updates'));
+assert(launcher.includes('eveCheckForUpdates'));
+assert(guide.includes('EVE_UPDATE_MANIFEST_URL'));
+assert(fs.existsSync(path.join(root,'google-workspace','release-manifest.example.json')));
+console.log('v59.2 Google update-awareness contract passed');

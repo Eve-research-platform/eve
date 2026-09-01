@@ -1,0 +1,13 @@
+{
+  "name": "eve-cloudflare-relay",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Zero-access participant relay for Eve",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

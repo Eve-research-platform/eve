@@ -1,0 +1,18 @@
+'use strict';
+const assert=require('assert'),fs=require('fs'),path=require('path');
+const root=path.join(__dirname,'..'),read=(...p)=>fs.readFileSync(path.join(root,...p),'utf8');
+delete global.studyPresentationTheme;delete global.studyThemeClass;delete global.studyThemeSettingsMarkup;delete global.EveStudyThemes;
+require(path.join(root,'app','eve-study-themes.js'));
+const defaultMarkup=studyThemeSettingsMarkup({settings:{presentationTheme:'default'}}),gdsMarkup=studyThemeSettingsMarkup({settings:{presentationTheme:'gds'}});
+assert(defaultMarkup.includes("sSetting('presentationTheme','gds')"));
+assert(defaultMarkup.includes('aria-pressed="true"'));
+assert(defaultMarkup.includes('Preview participant theme'));
+assert(!defaultMarkup.includes('type="radio"'));
+assert(gdsMarkup.includes('Current: <b>GDS</b>'));
+const app=read('app','app.js'),css=read('app','eve-study-themes.css');
+assert(app.includes('>Delete page</button>'));
+assert(app.includes('disabled title="A study needs at least one page"'));
+assert(app.includes("removePage('${p.id}')"));
+assert(css.includes('appearance:none'));
+assert(css.includes('.study-theme-actions'));
+console.log('v61.1 theme switcher and page deletion UI tests passed');

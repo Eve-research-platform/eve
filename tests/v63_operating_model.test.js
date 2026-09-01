@@ -1,0 +1,7 @@
+'use strict';
+const assert=require('assert'),fs=require('fs'),path=require('path');const root=path.join(__dirname,'..'),read=(...p)=>fs.readFileSync(path.join(root,...p),'utf8');
+const pkg=require('../package.json'),html=read('index.html'),js=read('deployment.js'),cfg=read('deployment-config.js');
+assert.equal(pkg.version,'63.0.0');assert(html.includes("Your organisation's cloud"));assert(html.includes('This computer'));assert(html.indexOf("Your organisation's cloud")<html.indexOf('Google Cloud'));assert(js.includes("goOrganisation"));assert(cfg.includes('channel: "development"'));
+for(const f of ['.devcontainer/devcontainer.json','.github/workflows/validate.yml','.github/workflows/publish-beta.yml','.github/workflows/promote-stable.yml','scripts/stage-deployment-site.sh','scripts/build-release-artifacts.sh','public-home.html','OPERATING_MODEL.md'])assert(fs.existsSync(path.join(root,f)),`missing ${f}`);
+const beta=read('.github','workflows','publish-beta.yml'),stable=read('.github','workflows','promote-stable.yml');assert(beta.includes(':beta'));assert(beta.includes('stage-deployment-site.sh'));assert(beta.includes('npm run check && npm test'));assert(stable.includes('Type PROMOTE'));assert(stable.includes('build-release-artifacts.sh'));assert(stable.includes('gh release create'));assert(stable.includes(':latest'));
+console.log('v63 simplified operating model contract passed');

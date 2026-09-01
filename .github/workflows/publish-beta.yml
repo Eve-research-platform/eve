@@ -1,0 +1,84 @@
+name: Publish Eve Beta
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  attestations: write
+  pages: write
+
+concurrency:
+  group: eve-pages
+  cancel-in-progress: false
+
+jobs:
+  beta:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+    steps:
+      - name: Check out Eve
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install --no-audit --no-fund
+      - name: Validate Beta
+        run: npm run check && npm test
+      - name: Set image name
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish Beta container
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE }}:beta
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+      - uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: ${{ env.IMAGE }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true
+      - name: Build public Beta and Stable site
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -rf _site && mkdir -p _site
+          cp public-home.html _site/index.html
+          cp deployment.css _site/deployment.css
+          bash scripts/stage-deployment-site.sh "$GITHUB_REPOSITORY" beta main beta _site/beta . "${GITHUB_SHA::7}"
+          STABLE_TAG="$(gh release view --json tagName --jq .tagName 2>/dev/null || true)"
+          if [[ -n "$STABLE_TAG" ]]; then
+            git worktree add /tmp/eve-stable "$STABLE_TAG"
+            STABLE_VERSION="$(tr -d '\r\n' < /tmp/eve-stable/VERSION)"
+            bash scripts/stage-deployment-site.sh "$GITHUB_REPOSITORY" stable "$STABLE_TAG" "$STABLE_VERSION" _site/stable /tmp/eve-stable "$STABLE_TAG"
+          else
+            mkdir -p _site/stable
+            cat > _site/stable/index.html <<'EOF'
+          <!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Eve Stable</title><link rel="stylesheet" href="../deployment.css"></head><body><main class="shell"><section class="hero"><div class="eyebrow">EVE STABLE</div><h1>No Stable release yet.</h1><p>Eve is currently in Beta testing. Use the Beta channel until a maintainer deliberately promotes a release.</p><p><a class="primary" href="../beta/">Try Eve Beta</a></p></section></main></body></html>
+          EOF
+          fi
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Publish GitHub Pages
+        id: pages
+        uses: actions/deploy-pages@v4

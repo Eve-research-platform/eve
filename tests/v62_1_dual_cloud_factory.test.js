@@ -1,0 +1,18 @@
+'use strict';
+const assert=require('assert'),fs=require('fs'),path=require('path');
+const root=path.join(__dirname,'..'),read=(...p)=>fs.readFileSync(path.join(root,...p),'utf8');
+const pkg=JSON.parse(read('package.json')),factory=read('deployment.js'),html=read('index.html'),azure=JSON.parse(read('deploy','azure','azuredeploy.json')),docs=read('deploy','azure','ONE_CLICK.md');
+assert.equal(pkg.version,'63.0.0');
+for(const token of ['chooseOrganisation','chooseGoogle','chooseAzure','organisationFlow','googleFlow','azureFlow','Change cloud','Create Eve on Google','Create standard Azure Eve'])assert(html.includes(token),`missing deployment launcher UI ${token}`);
+assert(factory.includes("h==='#google'"));assert(factory.includes("h==='#azure'"));assert(factory.includes('https://deploy.cloud.run'));assert(factory.includes('https://portal.azure.com/#create/Microsoft.Template/uri/'));
+assert(!html.includes('Temporary first-admin password</span><div><input'));assert(!factory.includes('makeSecrets'));
+const p=azure.parameters;
+assert.equal(azure.contentVersion,'1.1.0.0');assert.equal(p.containerImage.defaultValue,'ghcr.io/OWNER/REPOSITORY:beta');
+assert.equal(p.connectorSecret.type,'secureString');assert.equal(p.connectorSecret.defaultValue,'[newGuid()]');
+assert.equal(p.databaseAdminPassword.type,'secureString');assert(p.databaseAdminPassword.defaultValue.includes("Eve9!"));assert(p.databaseAdminPassword.defaultValue.includes('newGuid()'));
+assert.equal(p.bootstrapPassword.type,'secureString');assert(!('defaultValue' in p.bootstrapPassword));
+for(const type of ['Microsoft.App/containerApps','Microsoft.App/managedEnvironments','Microsoft.Storage/storageAccounts','Microsoft.DBforPostgreSQL/flexibleServers'])assert(azure.resources.some(r=>r.type===type),`missing ${type}`);
+const app=azure.resources.find(r=>r.type==='Microsoft.App/containerApps');const env=app.properties.template.containers[0].env;const names=new Set(env.map(x=>x.name));
+for(const name of ['EVE_CLOUD_PROVIDER','EVE_DEPLOYMENT_MODE','EVE_DEFAULT_STORAGE_PROVIDER','EVE_STATE_BACKEND','PGHOST','PGPASSWORD','EVE_RELEASE_VERSION'])assert(names.has(name),`missing env ${name}`);
+assert(docs.includes('The deployment launcher never receives'));assert(docs.includes('Azure Container Apps'));assert(docs.includes('PostgreSQL Flexible Server 16'));
+console.log('v62.2 dual-cloud deployment launcher + browser-first Azure deployment tests passed');

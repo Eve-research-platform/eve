@@ -1,0 +1,2664 @@
+/* Eve v54 — Purple workspace redesign
+   Applied from the supplied Eve design handoff. This file deliberately sits
+   after the legacy stylesheet so functionality can remain stable while the
+   visual system is replaced in one controlled layer. */
+:root{
+  --eve-ink:#241a41;
+  --eve-plum-900:#3a2668;
+  --eve-plum-800:#4f3490;
+  --eve-plum-700:#6544b4;
+  --eve-plum-500:#7c5cd0;
+  --eve-plum-400:#9a7fdc;
+  --eve-plum-300:#c1abee;
+  --eve-plum-250:#d3c6f3;
+  --eve-plum-200:#e7dffa;
+  --eve-plum-100:#f3effc;
+  --eve-ground:#f7f5fb;
+  --eve-desk:#efeaf7;
+  --eve-surface:#fff;
+  --eve-body:#3d3550;
+  --eve-secondary:#6f6880;
+  --eve-hint:#8a82a0;
+  --eve-border:#e0d7f4;
+  --eve-sage:#7a8a5e;
+  --eve-sage-100:#e4ead6;
+  --eve-sage-dark:#4a5535;
+  --eve-rose:#8f3a56;
+  --eve-rose-border:#e0c9d3;
+  --eve-ochre:#b98a3e;
+  --eve-font-display:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --eve-font-body:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --eve-radius-screen:34px;
+  --eve-radius-card:30px;
+  --eve-radius-panel:24px;
+  --eve-radius-row:20px;
+  --eve-shadow-card:0 2px 8px rgba(36,26,65,.06);
+  --eve-shadow-button:0 8px 18px rgba(124,92,208,.34);
+  --eve-shadow-selected:0 10px 26px rgba(124,92,208,.16);
+  --eve-shadow-modal:0 18px 40px rgba(36,26,65,.12);
+
+  /* Retune legacy variables so old components inherit the new system. */
+  --bg:var(--eve-ground);
+  --panel:var(--eve-surface);
+  --line:var(--eve-border);
+  --text:var(--eve-ink);
+  --muted:var(--eve-secondary);
+  --soft:var(--eve-plum-100);
+  --shadow:var(--eve-shadow-modal);
+  --radius:var(--eve-radius-card);
+  --radius-sm:var(--eve-radius-row);
+  --accent:var(--eve-plum-500);
+  --good:var(--eve-sage-dark);
+  --good-bg:var(--eve-sage-100);
+  --warn:var(--eve-plum-400);
+}
+
+*{box-sizing:border-box}
+html{background:var(--eve-desk);scroll-behavior:smooth}
+body{margin:0;background:var(--eve-desk);color:var(--eve-body);font-family:var(--eve-font-body);font-size:15px;line-height:1.58}
+button,input,textarea,select{font-family:var(--eve-font-body)}
+::selection{background:var(--eve-plum-200);color:var(--eve-ink)}
+:focus{outline:none}
+:focus-visible{outline:2px solid var(--eve-plum-500)!important;outline-offset:2px!important}
+h1,h2,h3,h4,h5,h6,.metric-card strong,.insight-bank-total strong,.archive-countdown strong,.review-kpi strong{font-family:var(--eve-font-display)!important;font-weight:400!important;letter-spacing:-.015em!important;color:var(--eve-ink)}
+p{color:var(--eve-body)}
+a,.text-btn{color:var(--eve-plum-700)}
+.muted{color:var(--eve-secondary)!important}
+.eyebrow,.section-label,.pane-title,.page-index,.block-type,.card-kicker{font-family:var(--eve-font-body);font-size:12px!important;line-height:1.2;font-weight:700!important;letter-spacing:.16em!important;text-transform:uppercase;color:var(--eve-plum-500)!important}
+.eve-icon{display:block;flex:none}
+
+/* Workspace shell ------------------------------------------------------ */
+.app-shell{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh;background:var(--eve-ground)}
+.app-shell.sidebar-collapsed{grid-template-columns:92px minmax(0,1fr)}
+.sidebar{position:sticky;top:0;height:100vh;align-self:start;background:var(--eve-plum-900)!important;color:#ded3f7;padding:28px 20px 20px;display:flex;flex-direction:column;gap:26px;border:0!important;z-index:80}
+.sidebar.collapsed{padding:24px 0;align-items:center;gap:22px}
+.sidebar-head{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:42px}
+.sidebar.collapsed .sidebar-head{width:100%;justify-content:center;flex-direction:column;gap:12px}
+.brand{display:flex;align-items:center;gap:12px;color:#fff;font-size:22px;font-family:var(--eve-font-display);font-weight:400;letter-spacing:-.015em}
+.brand-copy>div:first-child{font-family:var(--eve-font-display);font-size:22px;line-height:1;color:#fff}
+.brand-sub{font-family:var(--eve-font-body);font-size:11px;color:#b9a5e9;margin-top:5px;font-weight:600;letter-spacing:.02em}
+.eve-brand-petal{width:38px;height:38px;border-radius:14px 999px 999px 999px;background:linear-gradient(140deg,#b9a5e9,var(--eve-plum-500));display:inline-grid;place-items:center;flex:none;box-shadow:none}
+.eve-brand-petal>span{width:13px;height:13px;border-radius:999px;background:var(--eve-plum-900)}
+.sidebar.collapsed .brand-copy{display:none}
+.sidebar.collapsed .eve-brand-petal{width:40px;height:40px}
+.sidebar-toggle{width:34px;height:34px;border:1px solid rgba(231,223,250,.24);border-radius:999px;background:rgba(231,223,250,.08);color:#ded3f7;display:grid;place-items:center;padding:0}
+.sidebar-toggle:hover{background:rgba(231,223,250,.18);color:#fff}
+.sidebar .nav{display:flex;flex-direction:column;gap:4px;width:100%}
+.sidebar .nav button{min-height:42px;border:0;background:transparent;color:#c9bcec;text-align:left;padding:10px 14px;border-radius:999px;display:flex;gap:12px;align-items:center;font-size:14px;font-weight:600;transition:background .16s,color .16s,transform .16s}
+.sidebar .nav button:hover{background:rgba(231,223,250,.11);color:#fff}
+.sidebar .nav button.active{background:rgba(231,223,250,.18);color:#fff}
+.sidebar .nav button:active{transform:translateY(1px)}
+.sidebar .nav-icon{width:20px;display:grid;place-items:center;flex:none}
+.sidebar .nav-label{flex:1;white-space:nowrap}
+.sidebar.collapsed .nav{align-items:center}
+.sidebar.collapsed .nav button{width:46px;height:46px;min-height:46px;padding:0;justify-content:center;position:relative}
+.sidebar.collapsed .nav-label,.sidebar.collapsed .storage-copy{display:none}
+.sidebar.collapsed .nav button[data-label]:hover::after,.sidebar.collapsed .storage-chip[data-label]:hover::after{content:attr(data-label);position:absolute;left:58px;top:50%;transform:translateY(-50%);background:var(--eve-ink);color:#fff;padding:7px 11px;border-radius:999px;white-space:nowrap;font-size:12px;font-weight:700;box-shadow:var(--eve-shadow-card);z-index:90}
+.sidebar-spacer{flex:1}
+.sidebar-footer-nav{order:3}
+.storage-chip{order:2;width:100%;border:0!important;background:rgba(231,223,250,.12)!important;border-radius:24px!important;padding:16px!important;color:#fff!important;display:flex;align-items:flex-start;gap:10px;text-align:left;box-shadow:none!important;position:relative}
+.storage-chip:hover{background:rgba(231,223,250,.18)!important}
+.storage-chip .nav-icon{margin-top:1px;color:#b9a5e9}
+.storage-copy{min-width:0;flex:1}
+.storage-copy>div{display:flex;align-items:center;color:#b9a5e9;font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:700}
+.storage-chip b{font-size:14px;color:#fff;margin-top:7px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.storage-chip small{font-size:12px;color:#c9bcec!important;margin-top:3px}
+.sidebar.collapsed .storage-chip{width:46px;height:46px;padding:0!important;border-radius:999px!important;display:grid;place-items:center;order:2}
+.sidebar.collapsed .storage-chip .nav-icon{margin:0}
+.sidebar.collapsed .sidebar-footer-nav{order:3}
+.status-dot{width:8px;height:8px;border-radius:999px;background:var(--eve-sage);margin-right:7px;box-shadow:none}
+.status-dot.warn{background:var(--eve-plum-300)}
+
+.main{min-width:0;background:var(--eve-ground);min-height:100vh}
+.view-stage{min-width:0}
+/* Global destinations own their page title; study destinations keep a contextual top bar. */
+.view-home .topbar,.view-studies .topbar,.view-participants .topbar,.view-repository .topbar,.view-templates .topbar,.view-archive .topbar,.view-globalSettings .topbar,.view-storage .topbar{display:none}
+.topbar{height:72px;background:var(--eve-plum-900)!important;border:0!important;backdrop-filter:none!important;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:45}
+.topbar h1{font-family:var(--eve-font-body)!important;font-size:16px!important;font-weight:700!important;color:#fff!important;letter-spacing:0!important;margin:0}
+.topbar-heading{display:flex;align-items:center;gap:18px;min-width:0}
+.topbar-context{display:flex;align-items:center;gap:8px;min-width:0}
+.topbar-study{font-weight:700;color:#fff;max-width:380px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar-status,.topbar-version{font-size:12px;padding:5px 11px;border-radius:999px;background:rgba(231,223,250,.15);color:#ded3f7;text-transform:capitalize}
+.topbar-status.live{background:var(--eve-sage-100);color:var(--eve-sage-dark)}
+.topbar .actions{display:flex;gap:10px;align-items:center}
+.topbar .save-state{color:#c9bcec;font-size:12px}
+.topbar .btn:not(.primary),.topbar .icon-btn,.topbar .select{background:transparent!important;color:#fff!important;border-color:rgba(231,223,250,.38)!important}
+.topbar .btn:not(.primary):hover,.topbar .icon-btn:hover{background:rgba(231,223,250,.12)!important}
+.topbar .btn.primary{background:var(--eve-sage)!important;color:#fff!important;border-color:var(--eve-sage)!important;box-shadow:none!important}
+.topbar .select option{color:var(--eve-ink)}
+
+/* Shared controls ------------------------------------------------------ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;border:1px solid var(--eve-plum-250)!important;background:#fff!important;color:var(--eve-plum-800)!important;border-radius:999px!important;padding:10px 20px!important;font-size:14px;font-weight:600;line-height:1.2;box-shadow:none;transition:background .16s,border-color .16s,transform .16s,box-shadow .16s}
+.btn:hover{background:var(--eve-plum-100)!important;border-color:var(--eve-plum-300)!important}
+.btn:active{transform:translateY(1px);box-shadow:none!important}
+.btn.primary,.btn-primary{background:var(--eve-plum-500)!important;color:#fff!important;border-color:var(--eve-plum-500)!important;font-weight:700;box-shadow:var(--eve-shadow-button)!important}
+.btn.primary:hover,.btn-primary:hover{background:var(--eve-plum-700)!important;border-color:var(--eve-plum-700)!important}
+.btn.primary-soft{background:var(--eve-plum-200)!important;color:var(--eve-plum-800)!important;border-color:transparent!important;font-weight:700}
+.btn.secondary{background:#fff!important}
+.btn.subtle{background:var(--eve-plum-100)!important;border-color:transparent!important}
+.btn.large{padding:12px 22px!important;min-height:44px}
+.btn.danger-outline,.page-delete-button{background:#fff!important;color:var(--eve-rose)!important;border-color:var(--eve-rose-border)!important;box-shadow:none!important}
+.btn.danger-outline:hover,.page-delete-button:hover{background:#fff6f8!important;border-color:#d8adbd!important}
+.danger-text,.text-btn.danger-text{color:var(--eve-rose)!important}
+.icon-btn{width:36px;min-width:36px;height:36px;padding:0!important;border:0;background:transparent;color:var(--eve-hint);border-radius:999px;display:inline-grid;place-items:center}
+.icon-btn:hover{background:var(--eve-plum-100);color:var(--eve-plum-800)}
+.text-btn{font-family:var(--eve-font-body);font-weight:700;border:0;background:transparent;padding:3px 5px;border-radius:999px;color:var(--eve-plum-700)}
+.text-btn:hover{background:var(--eve-plum-100);color:var(--eve-plum-800)}
+.input,.select,.textarea,.inline-title{font-family:var(--eve-font-body);color:var(--eve-ink)}
+.input,.select{border:1px solid var(--eve-border)!important;border-radius:999px!important;background:#fff!important;min-height:42px;padding:9px 16px!important;box-shadow:none!important}
+.textarea{border:1px solid var(--eve-border)!important;border-radius:20px!important;background:#fff!important;padding:12px 15px!important;box-shadow:none!important}
+.input:hover,.select:hover,.textarea:hover{border-color:var(--eve-plum-300)!important}
+.input:focus,.select:focus,.textarea:focus{border-color:var(--eve-plum-500)!important;box-shadow:0 0 0 3px rgba(124,92,208,.12)!important}
+.field{gap:7px;margin:15px 0}
+.field label,.tree-editor label{font-size:12px;color:var(--eve-secondary);font-weight:600}
+.switch{width:42px!important;height:24px!important;border:0!important;border-radius:999px!important;background:#ddd4ee!important;box-shadow:none!important;flex:none}
+.switch::after{width:18px!important;height:18px!important;top:3px!important;left:3px!important;background:#fff!important;box-shadow:0 1px 3px rgba(36,26,65,.16)}
+.switch.on{background:var(--eve-plum-500)!important}
+.switch.on::after{left:21px!important}
+.segmented,.study-filter-segments{display:inline-flex;background:#fff;border:1px solid var(--eve-border);border-radius:999px;padding:4px;gap:2px;box-shadow:none}
+.segmented button,.study-filter-segments button{border:0;background:transparent;color:var(--eve-secondary);font-size:13px;font-weight:600;padding:8px 18px;border-radius:999px}
+.segmented button.active,.study-filter-segments button.active{background:var(--eve-plum-900)!important;color:#fff!important;box-shadow:none!important}
+.pill,.tag,.source-pill,.confidence{display:inline-flex;align-items:center;width:max-content;border:0;border-radius:999px!important;background:var(--eve-plum-100)!important;color:var(--eve-plum-800)!important;font-size:12px!important;font-weight:700;padding:5px 13px!important;text-transform:capitalize;letter-spacing:0}
+.pill.live,.tag.live{background:var(--eve-sage-100)!important;color:var(--eve-sage-dark)!important}
+
+/* Page content + cards ------------------------------------------------- */
+.content{padding:30px 36px 56px;max-width:1540px;margin:0 auto}
+.content.narrow{max-width:1120px}
+.hero{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin:0 0 24px}
+.hero.compact{align-items:center}
+.hero h2,.results-header h2,.home-welcome h2{font-size:34px!important;line-height:1.1!important;margin:5px 0 7px!important;color:var(--eve-ink)!important}
+.hero-copy{max-width:700px;font-size:15px;line-height:1.62;color:var(--eve-secondary)}
+.card{background:var(--eve-surface)!important;border:0!important;border-radius:var(--eve-radius-card)!important;padding:24px 26px!important;box-shadow:var(--eve-shadow-card)!important}
+.card:hover{border-color:transparent}
+.metric-grid,.result-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.metric-card{min-height:142px;display:flex;flex-direction:column;gap:6px}
+.metric-card>span{font-size:13px;color:var(--eve-secondary)}
+.metric-card strong{font-size:34px;line-height:1;margin:8px 0 auto;color:var(--eve-ink)}
+.metric-card .metric-word{font-size:25px;text-transform:none}
+.metric-card small{font-size:12px;color:var(--eve-secondary)}
+.metric-card .healthy-copy{color:var(--eve-sage);font-weight:700}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:28px 0 14px}
+.section-head h3{font-size:20px;margin:0 0 4px}
+.section-head.small-head{margin:0 0 16px}
+.empty-state,.empty{background:var(--eve-surface);border-radius:var(--eve-radius-card);color:var(--eve-secondary)}
+.empty-icon{color:var(--eve-plum-500)}
+
+/* Home --------------------------------------------------------------- */
+.home-dashboard{padding-top:34px}
+.home-welcome{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:22px}
+.home-welcome p{margin:0;color:var(--eve-secondary);font-size:15px}
+.home-primary-actions{display:flex;gap:10px;align-items:center}
+.home-metrics .panel-metric{background:var(--eve-plum-900)!important;color:#fff}
+.home-metrics .panel-metric span,.home-metrics .panel-metric small{color:#c9bcec}
+.home-metrics .panel-metric strong{color:#fff!important}
+.home-dashboard-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:16px;margin-top:16px;align-items:start}
+.home-recent{min-width:0}
+.home-recent .study-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.home-recent .study-card{background:var(--eve-plum-100)!important;box-shadow:none!important;border:0!important;min-height:0}
+.home-recent .study-open{padding-top:7px}
+.home-recent .study-footer{border:0!important;padding-top:4px}
+.home-dashboard-side{display:grid;gap:16px}
+.home-needs h3,.home-chart h3,.home-recent h3{font-size:20px;margin:0}
+.needs-row{display:flex;gap:12px;align-items:flex-start;padding:5px 0}
+.needs-row p{margin:0;color:var(--eve-body);font-size:14px;line-height:1.5}
+.needs-dot{width:10px;height:10px;border-radius:999px;background:var(--eve-plum-500);margin-top:6px;flex:none}
+.needs-dot.soft{background:var(--eve-plum-300)}
+.needs-dot.sage{background:var(--eve-sage)}
+.home-chart{background:var(--eve-plum-200)!important;min-height:230px;display:flex;flex-direction:column;justify-content:space-between}
+.home-chart p{margin:3px 0 0;color:var(--eve-plum-800);font-size:13px}
+.home-chart-bars{height:125px;display:flex;gap:7px;align-items:flex-end;margin-top:16px}
+.home-chart-bar{height:var(--bar);flex:1;min-width:5px;border-radius:999px;background:var(--eve-plum-400);transition:height .2s}
+.home-chart-bar:nth-last-child(-n+5){background:var(--eve-plum-500)}
+.home-chart-bar.peak{background:var(--eve-plum-800)}
+
+/* Studies ------------------------------------------------------------ */
+.studies-library{padding-top:34px}
+.study-library-toolbar{display:flex!important;align-items:center;gap:12px;margin:0 0 20px;background:transparent!important;border:0!important;padding:0!important;box-shadow:none!important}
+.study-search{flex:1;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--eve-border);border-radius:999px;padding:0 17px;min-height:44px;color:var(--eve-hint)}
+.study-search .input{border:0!important;padding:0!important;min-height:auto;background:transparent!important;box-shadow:none!important}
+.study-filter-segments{flex:none}
+.study-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.study-card{padding:0!important;overflow:hidden;min-height:210px;display:flex;flex-direction:column;border:1.5px solid transparent!important;transition:transform .16s,box-shadow .16s,border-color .16s}
+.study-card:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(36,26,65,.10)!important}
+.study-card[data-study-status="live"]{border-color:var(--eve-plum-250)!important}
+.study-card-top{padding:20px 22px 0;display:flex;justify-content:space-between;align-items:center}
+.study-card-actions{display:flex;gap:3px}
+.study-open{padding:12px 24px 16px;flex:1;text-align:left;border:0;background:transparent}
+.study-open h3{font-family:var(--eve-font-display)!important;font-size:21px!important;font-weight:400!important;line-height:1.16;margin:6px 0 8px;color:var(--eve-ink)}
+.study-kind{font-size:13px;color:var(--eve-secondary)}
+.study-footer{border:0!important;padding:10px 22px 18px;color:var(--eve-hint);font-size:12px;display:flex;justify-content:space-between;align-items:center}
+.study-progress{padding:0 22px 2px}
+.study-progress-row{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--eve-plum-800);font-weight:700;margin-bottom:7px}
+.study-progress-track{height:8px;background:var(--eve-desk);border-radius:999px;overflow:hidden}
+.study-progress-track span{display:block;height:100%;width:var(--progress);background:var(--eve-plum-500);border-radius:999px}
+
+/* Study workflow ------------------------------------------------------ */
+.study-flow{display:flex;align-items:center;gap:3px;background:var(--eve-plum-900)!important;padding:0 28px 17px!important;margin:0!important;position:sticky;top:72px;z-index:44;border:0!important;box-shadow:none!important}
+.flow-line{display:none!important}
+.flow-step{border:0!important;background:transparent!important;color:#ded3f7!important;border-radius:999px!important;padding:8px 17px!important;display:flex!important;align-items:center!important;gap:8px!important;min-height:38px!important}
+.flow-step:hover{background:rgba(231,223,250,.12)!important}
+.flow-step.active{background:#fff!important;color:var(--eve-plum-900)!important}
+.flow-step.complete:not(.active){color:#fff!important}
+.flow-num{width:auto!important;height:auto!important;min-width:0!important;border:0!important;background:transparent!important;color:inherit!important;font-size:12px!important;font-weight:700!important}
+.flow-step>span:last-child{display:flex;align-items:center;gap:6px}
+.flow-step b{font-size:13px;color:inherit}
+.flow-step small{display:none!important}
+
+/* Builder ------------------------------------------------------------ */
+.builder.vertical-pages.builder-two-column,.builder{display:grid;grid-template-columns:264px minmax(0,1fr);height:calc(100vh - 127px)!important;background:var(--eve-ground)}
+.outline-rail,.pane.structure{background:var(--eve-plum-100)!important;border-right:1px solid var(--eve-border)!important;padding:22px 18px;overflow:auto}
+.outline-header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.outline-header .pane-title{padding:0!important;color:var(--eve-plum-500)!important}
+.pane-hint{font-size:12px;color:var(--eve-secondary);line-height:1.45;margin-top:5px}
+.outline-summary{font-size:12px;color:var(--eve-secondary);margin:12px 0}
+.outline-list{display:flex;flex-direction:column;gap:6px}
+.outline-page,.page-outline-row,.outline-page-button{border-radius:20px!important}
+.outline-page.active,.page-outline-row.active,.outline-page-button.active{background:var(--eve-plum-500)!important;color:#fff!important}
+.outline-ready{background:var(--eve-sage-100);color:var(--eve-sage-dark);font-size:11px;font-weight:700;padding:5px 10px;border-radius:999px}
+.outline-issue-link{border:0;background:var(--eve-plum-200);color:var(--eve-plum-800);font-weight:700;border-radius:999px;padding:6px 10px}
+.canvas{background:var(--eve-ground)!important;padding:28px 40px!important;overflow:auto}
+.canvas-inner{max-width:900px!important;margin:0 auto}
+.study-heading{margin-bottom:20px}
+.study-heading .study-title{font-family:var(--eve-font-display)!important;font-weight:400!important;font-size:32px!important;color:var(--eve-ink)!important}
+.builder-page-section{border-radius:var(--eve-radius-card);margin-bottom:18px;scroll-margin-top:150px}
+.page-canvas-heading{padding:16px 8px 13px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px}
+.page-title-input{font-family:var(--eve-font-display)!important;font-size:24px!important;font-weight:400!important;color:var(--eve-ink)!important}
+.page-check-line{font-size:12px;color:var(--eve-secondary);margin-top:4px}
+.page-check-line.ready{color:var(--eve-sage)}
+.block-card{background:#fff!important;border:1px solid transparent!important;border-radius:var(--eve-radius-card)!important;padding:24px 26px!important;margin-bottom:14px!important;box-shadow:var(--eve-shadow-card)!important}
+.block-card.selected{border:2px solid var(--eve-plum-500)!important;box-shadow:var(--eve-shadow-selected)!important}
+.block-card:hover{border-color:var(--eve-plum-250)!important}
+.block-head{margin-bottom:17px}
+.inline-title{font-family:var(--eve-font-display)!important;font-size:21px!important;font-weight:400!important;color:var(--eve-ink)!important}
+.block-type{display:inline-flex;width:max-content;background:var(--eve-plum-200);color:var(--eve-plum-800)!important;border-radius:999px;padding:5px 12px;margin-bottom:6px}
+.block-required-chip,.builder-status{border-radius:999px!important}
+.new-page-canvas,.empty-page{border:2px dashed var(--eve-plum-250)!important;background:#faf8fd!important;border-radius:var(--eve-radius-card)!important;box-shadow:none!important}
+.new-page-button{border-style:dashed!important}
+.section-settings-drawer,.settings-drawer{background:#fff!important;border-left:1px solid var(--eve-border)!important;box-shadow:-12px 0 32px rgba(36,26,65,.08)!important}
+.add-option{border:0!important;background:var(--eve-plum-100)!important;border-radius:20px!important;padding:13px!important}
+.add-option:hover{background:var(--eve-plum-200)!important}
+
+/* Settings + Send ---------------------------------------------------- */
+.study-settings-layout,.settings-layout,.send-layout,.simplified-send{background:var(--eve-ground)}
+.settings-card,.send-segment-setting-panel,.send-fix-strip,.send-status,.participant-library-card,.repository-tools{border-radius:var(--eve-radius-card)!important}
+.settings-card-icon{background:var(--eve-plum-200)!important;color:var(--eve-plum-800)!important;border-radius:999px!important}
+.send-hero{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:18px}
+.send-hero h2{font-size:32px;line-height:1.1;margin:4px 0 7px}
+.send-status{background:#fff!important;border:0!important;box-shadow:var(--eve-shadow-card)!important;padding:15px 18px!important}
+.send-status.live{background:var(--eve-sage-100)!important;color:var(--eve-sage-dark)!important}
+.send-live-actions{display:flex;gap:8px;justify-content:flex-end}
+.send-share-stack{display:grid;gap:16px}
+.send-share-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:18px}
+.send-share-heading h2{font-size:24px;margin:4px 0}
+.send-segment-card-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.send-segment-card,.send-segment-setting-panel{background:#fff!important;border:0!important;box-shadow:var(--eve-shadow-card)!important;border-radius:var(--eve-radius-card)!important}
+.share-version-pill{border-radius:999px!important}
+.send-access-offline{border:0!important;background:var(--eve-plum-100)!important;border-radius:20px!important}
+
+/* Review ------------------------------------------------------------- */
+.review-layout,.results-layout,.review-workspace{background:var(--eve-ground)}
+.results-header,.review-header{background:transparent!important}
+.review-tabs,.review-section-tabs,.review-filter-bar{background:#fff!important;border:1px solid var(--eve-border)!important;border-radius:999px!important;padding:4px!important}
+.review-tabs button,.review-section-tabs button{border-radius:999px!important}
+.review-tabs button.active,.review-section-tabs button.active{background:var(--eve-plum-900)!important;color:#fff!important}
+.result-card,.question-result,.review-card,.recording-review-item{border:0!important;background:#fff!important;border-radius:var(--eve-radius-card)!important;box-shadow:var(--eve-shadow-card)!important}
+.result-metrics .card{min-height:120px}
+
+/* Insights ----------------------------------------------------------- */
+.insight-repository{padding-top:34px}
+.insight-repository-hero{align-items:flex-end}
+.insight-bank-total{background:var(--eve-plum-900);color:#fff;border-radius:var(--eve-radius-card);padding:18px 22px;min-width:140px;text-align:center}
+.insight-bank-total strong{display:block;color:#fff!important;font-size:32px}
+.insight-bank-total span{color:#c9bcec;font-size:12px}
+.repository-tools{padding:16px 18px!important}
+.repository-search-row{display:flex;gap:10px;align-items:center}
+.repository-search{flex:1;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--eve-border);border-radius:999px;padding-left:14px}
+.repository-search .input{border:0!important;box-shadow:none!important;background:transparent!important}
+.repository-tag-filter{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.repository-tag-filter button,.tag-row button{border:0;background:var(--eve-plum-100);color:var(--eve-plum-800);border-radius:999px;padding:7px 12px;font-weight:600}
+.repository-tag-filter button.active{background:var(--eve-plum-900);color:#fff}
+.insight-bank-grid,.finding-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.finding-card{min-height:250px}
+.finding-evidence{background:var(--eve-plum-100)!important;border:0!important;border-radius:20px!important}
+
+/* Participants / panel ---------------------------------------------- */
+.participants-page{padding-top:34px}
+.participants-page .metric-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+.panel-directory-card,.participant-library-card{margin-top:16px}
+.panel-table-wrap,.participant-history-wrap{overflow:auto}
+.data-table,.participant-history-table,.panel-table{width:100%;border-collapse:separate!important;border-spacing:0 6px!important;font-size:14px}
+.data-table th,.participant-history-table th,.panel-table th{border:0!important;padding:8px 12px!important;font-size:12px!important;font-weight:700!important;text-transform:uppercase;letter-spacing:.08em;color:var(--eve-hint)!important}
+.data-table td,.participant-history-table td,.panel-table td{border:0!important;background:#faf8fd;padding:12px!important}
+.data-table tbody tr:nth-child(even) td,.participant-history-table tbody tr:nth-child(even) td,.panel-table tbody tr:nth-child(even) td{background:#fff}
+.data-table tbody tr:hover td,.participant-history-table tbody tr:hover td,.panel-table tbody tr:hover td{background:var(--eve-plum-100)!important}
+.data-table td:first-child,.participant-history-table td:first-child,.panel-table td:first-child{border-radius:20px 0 0 20px}
+.data-table td:last-child,.participant-history-table td:last-child,.panel-table td:last-child{border-radius:0 20px 20px 0}
+.panel-member-row{cursor:pointer}
+.segment-card{background:var(--eve-plum-100)!important;border:0!important;border-radius:24px!important;padding:18px!important;box-shadow:none!important}
+.segment-rule-summary span{background:#fff;border-radius:999px!important;border:0!important}
+.panel-member-summary>div{background:var(--eve-plum-100)!important;border:0!important;border-radius:20px!important}
+
+/* Storage + Global Settings ----------------------------------------- */
+.view-storage .content,.view-globalSettings .content{padding-top:34px}
+.storage-provider-card,.connector-card,.storage-location-card,.settings-card,.global-email-card{background:#fff!important;border:0!important;border-radius:var(--eve-radius-card)!important;box-shadow:var(--eve-shadow-card)!important}
+.connector-provider-icon,.settings-card-icon{background:var(--eve-plum-200)!important;color:var(--eve-plum-800)!important}
+.connector-provider-card.connected,.storage-provider-card.connected{border:1.5px solid var(--eve-plum-250)!important}
+.connector-status.connected,.global-ai-status.ready{background:var(--eve-sage-100)!important;color:var(--eve-sage-dark)!important}
+.global-settings-grid{gap:16px!important}
+.global-email-status{background:var(--eve-plum-100)!important;border:0!important;border-radius:20px!important}
+.email-test-panel,.email-template-group,.email-advanced-settings{background:var(--eve-plum-100)!important;border:0!important;border-radius:20px!important}
+
+/* Archive + Templates ------------------------------------------------ */
+.archive-page,.templates-page{padding-top:34px}
+.archive-study-card{display:flex;justify-content:space-between;gap:18px;align-items:center}
+.archive-box-icon{background:var(--eve-plum-200)!important;color:var(--eve-plum-800)!important;border-radius:999px!important}
+.template-card{border:0!important;border-radius:var(--eve-radius-card)!important;background:#fff!important;box-shadow:var(--eve-shadow-card)!important}
+
+/* Dialogs ------------------------------------------------------------ */
+.modal,.preview-wrap{background:rgba(36,26,65,.44)!important;backdrop-filter:blur(6px)!important;padding:24px}
+.modal-card,.dialog,.preview{border:0!important;border-radius:34px!important;background:#fff!important;box-shadow:var(--eve-shadow-modal)!important}
+.modal-head h3{font-size:24px!important}
+.preview-side{background:var(--eve-plum-100)!important;border-left:0!important}
+
+/* Participant-facing study ------------------------------------------ */
+.participant-shell{min-height:100vh;background:var(--eve-ground)!important;color:var(--eve-body);padding-bottom:50px}
+.participant-top{height:72px;background:transparent!important;border:0!important;padding:0 32px;max-width:980px;margin:0 auto}
+.participant-brand{font-family:var(--eve-font-display);font-size:20px;color:var(--eve-plum-900)}
+.privacy-badge{background:var(--eve-sage-100)!important;color:var(--eve-sage-dark)!important;border-radius:999px;padding:7px 11px;font-size:12px;font-weight:700}
+.participant-runtime{max-width:900px;margin:0 auto;padding:16px 24px 80px}
+.participant-card,.participant-runtime>form,.participant-runtime>.completion{background:#fff;border-radius:34px;padding:34px 38px;box-shadow:var(--eve-shadow-card)}
+.participant-progress{height:8px;background:var(--eve-desk);border-radius:999px;overflow:hidden;margin-bottom:30px}
+.participant-progress span{background:var(--eve-plum-500)!important;border-radius:999px}
+.participant-study-title h1{font-family:var(--eve-font-display)!important;font-size:36px!important;font-weight:400!important;color:var(--eve-ink)}
+.participant-section{margin-bottom:34px}
+.participant-section h2,.participant-section h3{font-family:var(--eve-font-display)!important;font-weight:400!important;color:var(--eve-ink)}
+.choice,.tree-choice,.check-list{border:0!important;background:var(--eve-plum-100)!important;border-radius:20px!important;padding:13px 16px!important}
+.choice:hover,.tree-choice:hover{background:var(--eve-plum-200)!important}
+.consent-choice{background:#faf8fd!important}
+.participant-submit{min-height:48px!important}
+.required{color:var(--eve-rose)!important}
+.panel-signup-runtime{background:#fff!important;border:0!important}
+.panel-signup-terms{background:var(--eve-plum-100)!important;border:0!important;border-radius:20px!important}
+
+/* Mobile ------------------------------------------------------------- */
+.mobile-nav{display:none}
+@media(max-width:1180px){
+  .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .participants-page .metric-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .study-grid,.insight-bank-grid,.finding-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .home-dashboard-grid{grid-template-columns:1fr}
+  .send-segment-card-list{grid-template-columns:1fr}
+}
+@media(max-width:900px){
+  .app-shell,.app-shell.sidebar-collapsed{display:block;min-height:100vh}
+  .sidebar{display:none!important}
+  .main{min-height:100vh}
+  .view-home .topbar,.view-studies .topbar,.view-participants .topbar,.view-repository .topbar,.view-templates .topbar,.view-archive .topbar,.view-globalSettings .topbar,.view-storage .topbar{display:none!important}
+  .topbar{height:auto;min-height:64px;padding:10px 16px;position:sticky;top:0;flex-wrap:wrap;gap:8px}
+  .topbar-heading{min-width:0;flex:1}
+  .topbar h1{display:none}
+  .topbar-context{min-width:0;flex-wrap:wrap}
+  .topbar-study{max-width:min(54vw,360px)}
+  .topbar .actions{width:100%;overflow-x:auto;padding-bottom:3px;justify-content:flex-start;scrollbar-width:none}
+  .topbar .actions::-webkit-scrollbar{display:none}
+  .study-flow{top:111px;overflow-x:auto;padding:7px 12px 12px!important;scrollbar-width:none}
+  .study-flow::-webkit-scrollbar{display:none}
+  .flow-step{flex:none}
+  .content{padding:22px 16px 92px}
+  .home-dashboard,.studies-library,.participants-page,.insight-repository,.view-storage .content,.view-globalSettings .content{padding-top:22px}
+  .hero,.home-welcome,.send-hero{align-items:flex-start;flex-direction:column}
+  .hero>div,.home-welcome>div:first-child{width:100%}
+  .home-primary-actions,.hero .toolbar{width:100%}
+  .home-primary-actions .btn,.hero .toolbar .btn{flex:1}
+  .metric-grid,.participants-page .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .study-library-toolbar{align-items:stretch;flex-direction:column}
+  .study-filter-segments{width:100%;overflow-x:auto;justify-content:flex-start}
+  .study-filter-segments button{flex:none}
+  .study-grid,.home-recent .study-grid,.insight-bank-grid,.finding-grid{grid-template-columns:1fr}
+  .builder.vertical-pages.builder-two-column,.builder{height:auto!important;display:block!important;min-height:0!important;overflow:visible!important}
+  .outline-rail,.pane.structure{position:relative!important;width:100%!important;max-height:none!important;overflow:visible!important;border-right:0!important;border-bottom:1px solid var(--eve-border)!important;padding:16px}
+  .outline-list{max-height:260px;overflow:auto}
+  .canvas{height:auto!important;overflow:visible!important;padding:20px 14px 100px!important}
+  .canvas-inner{max-width:none!important}
+  .builder-page-stack,.builder-page-section{overflow:visible!important}
+  .page-canvas-heading{flex-direction:column}
+  .page-heading-actions{width:100%;display:flex;overflow-x:auto;gap:7px}
+  .page-heading-actions .btn{flex:none}
+  .block-card{padding:20px!important;border-radius:24px!important}
+  .send-share-heading{align-items:flex-start;flex-direction:column}
+  .repository-search-row{align-items:stretch;flex-direction:column}
+  .global-settings-grid{grid-template-columns:1fr!important}
+  .email-settings-columns{grid-template-columns:1fr!important}
+  .participant-runtime{padding:10px 14px 90px}
+  .participant-card,.participant-runtime>form,.participant-runtime>.completion{padding:24px 20px;border-radius:28px}
+  .mobile-nav{position:fixed;left:12px;right:12px;bottom:10px;z-index:95;display:grid!important;grid-template-columns:repeat(5,1fr);gap:3px;background:var(--eve-plum-900);border:1px solid rgba(231,223,250,.18);border-radius:24px;padding:6px;box-shadow:0 12px 30px rgba(36,26,65,.24)}
+  .mobile-nav button{border:0;background:transparent;color:#c9bcec;border-radius:18px;min-width:0;padding:8px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px}
+  .mobile-nav button b{font-size:10px;font-weight:600;white-space:nowrap}
+  .mobile-nav button.active{background:rgba(231,223,250,.18);color:#fff}
+}
+@media(max-width:560px){
+  .metric-grid,.participants-page .metric-grid{grid-template-columns:1fr 1fr}
+  .metric-card{min-height:125px;padding:20px!important}
+  .metric-card strong{font-size:30px}
+  .hero h2,.home-welcome h2{font-size:30px!important}
+  .home-primary-actions{display:grid;grid-template-columns:1fr 1fr}
+  .home-chart-bars{gap:5px}
+  .card{padding:20px!important;border-radius:26px!important}
+  .send-live-actions{display:grid!important;grid-template-columns:1fr!important;width:100%}
+  .send-live-actions .btn{width:100%}
+  .participant-top{padding:0 16px}
+}
+@media(max-width:380px){
+  .metric-grid,.participants-page .metric-grid{grid-template-columns:1fr}
+  .mobile-nav{left:7px;right:7px}
+  .mobile-nav button b{font-size:9px}
+}
+
+/* State discipline from the handoff: plum for attention, sage for healthy,
+   rose only for destructive/error messaging. */
+.settings-note.warning,.recording-load-error,.error-card{background:#fff8fb!important;color:var(--eve-rose)!important;border:1px solid var(--eve-rose-border)!important;border-radius:20px!important}
+.settings-note:not(.warning){background:var(--eve-plum-100)!important;border:0!important;border-radius:20px!important;color:var(--eve-body)!important}
+.toast.error{background:var(--eve-ink)!important;color:#fff!important;border-color:transparent!important}
+
+
+/* v54.0.1 · Builder polish and missing-theme recovery
+   This is intentionally the final visual layer. It removes the remaining
+   legacy density visible in the first v54 screenshot without changing
+   application behaviour. */
+
+body{font-size:15px}
+
+/* Workspace chrome */
+.topbar{
+  height:80px;
+  padding:0 32px;
+  border-bottom:1px solid rgba(231,223,250,.12)!important;
+}
+.topbar-heading{gap:16px}
+.topbar h1{font-size:15px!important;opacity:.9}
+.topbar-context{gap:9px}
+.topbar-study{font-size:14px;max-width:430px}
+.topbar-status,.topbar-version{padding:6px 11px;font-size:11px;font-weight:700}
+.topbar .actions{gap:9px}
+.topbar .actions>.btn,.topbar .actions>.select{min-height:40px}
+.topbar .actions>.icon-btn{width:40px;height:40px}
+
+.study-flow{
+  top:80px;
+  min-height:58px;
+  padding:9px 32px 12px!important;
+  gap:8px;
+  border-bottom:1px solid rgba(231,223,250,.10)!important;
+}
+.flow-step{
+  min-height:40px!important;
+  padding:9px 18px!important;
+  gap:9px!important;
+  font-size:13px;
+}
+.flow-step.active{box-shadow:0 5px 16px rgba(36,26,65,.13)}
+.flow-num{
+  min-width:22px!important;
+  height:22px!important;
+  display:grid!important;
+  place-items:center;
+  border-radius:999px!important;
+  background:rgba(231,223,250,.16)!important;
+}
+.flow-step.active .flow-num{background:var(--eve-plum-200)!important;color:var(--eve-plum-800)!important}
+.flow-step b{font-size:13px}
+
+/* Builder proportions */
+.builder.vertical-pages.builder-two-column,.builder{
+  grid-template-columns:286px minmax(0,1fr);
+  height:calc(100vh - 138px)!important;
+}
+.outline-rail,.pane.structure{
+  padding:26px 18px 22px;
+  background:#f2eefb!important;
+}
+.outline-header{gap:12px}
+.outline-header .pane-title{font-size:11px!important}
+.pane-hint{font-size:12px;max-width:185px}
+.outline-summary{
+  margin:16px 2px 12px;
+  padding-top:12px;
+  border-top:1px solid var(--eve-border);
+  font-size:11px;
+}
+.outline-list{gap:9px}
+.outline-page{
+  padding:7px;
+  border:1px solid transparent;
+  transition:background .15s,border-color .15s,box-shadow .15s;
+}
+.outline-page.active{
+  background:rgba(255,255,255,.68)!important;
+  color:var(--eve-body)!important;
+  border-color:var(--eve-plum-250)!important;
+  box-shadow:0 5px 18px rgba(58,38,104,.06);
+}
+.outline-page-head{display:flex;align-items:center;gap:5px}
+.outline-page-link{
+  min-width:0;
+  width:100%;
+  border:0;
+  background:transparent;
+  color:inherit;
+  border-radius:15px;
+  padding:8px 7px;
+}
+.outline-page.active .outline-page-link{color:var(--eve-ink)!important}
+.outline-page-drag,.outline-step-drag{
+  width:24px;
+  min-width:24px;
+  color:var(--eve-plum-400);
+  display:grid;
+  place-items:center;
+  opacity:.65;
+}
+.outline-page-drag .eve-icon,.outline-step-drag .eve-icon{width:14px;height:14px}
+.outline-page-number{
+  width:30px;
+  height:30px;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  background:#fff;
+  color:var(--eve-plum-800);
+  font-size:10px;
+  font-weight:800;
+}
+.outline-page-copy b{font-size:13px}
+.outline-page-copy small{font-size:10px;color:var(--eve-secondary)}
+.outline-page.active .outline-page-copy small{color:var(--eve-secondary)!important}
+.outline-steps{
+  display:grid;
+  gap:4px;
+  padding:3px 3px 6px 31px;
+}
+.outline-step-wrap{
+  display:grid;
+  grid-template-columns:22px minmax(0,1fr);
+  align-items:center;
+  border-radius:13px;
+}
+.outline-step{
+  width:100%;
+  min-width:0;
+  border:0;
+  border-radius:13px!important;
+  background:transparent!important;
+  color:var(--eve-body)!important;
+  padding:7px 8px!important;
+  text-align:left;
+}
+.outline-step:hover{background:rgba(124,92,208,.08)!important}
+.outline-step.active{
+  background:#fff!important;
+  color:var(--eve-ink)!important;
+  box-shadow:0 2px 8px rgba(36,26,65,.07);
+}
+.outline-step-index{
+  width:22px;
+  height:22px;
+  border-radius:7px;
+  display:grid;
+  place-items:center;
+  background:var(--eve-plum-100);
+  color:var(--eve-plum-700);
+  font-size:9px;
+  font-weight:800;
+}
+.outline-step-copy b{font-size:11px;line-height:1.25}
+.outline-step-copy small{font-size:9px;color:var(--eve-hint)!important}
+.outline-issue-dot,.outline-step-issue{
+  background:#fff3f7!important;
+  color:var(--eve-rose)!important;
+  border:0!important;
+}
+
+.canvas{
+  padding:34px 48px 54px!important;
+  background:#f8f6fc!important;
+}
+.canvas-inner{max-width:1080px!important}
+.study-heading{
+  margin:0 4px 26px;
+  padding:0 2px;
+}
+.study-heading .eyebrow{margin-bottom:5px}
+.study-heading .study-title{
+  width:100%;
+  font-size:38px!important;
+  line-height:1.08!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+}
+.study-heading>.muted{font-size:14px;margin-top:5px;max-width:720px}
+
+.builder-page-section{
+  margin-bottom:24px;
+  scroll-margin-top:160px;
+}
+.page-canvas-heading{
+  position:relative;
+  margin-bottom:16px;
+  padding:22px 24px;
+  border:1px solid var(--eve-border);
+  border-radius:26px;
+  background:rgba(255,255,255,.82);
+  box-shadow:0 2px 10px rgba(36,26,65,.04);
+}
+.builder-page-section.active .page-canvas-heading{
+  border-color:var(--eve-plum-300);
+}
+.page-index{font-size:10px!important;margin-bottom:3px}
+.page-title-input{
+  width:min(520px,100%);
+  font-size:27px!important;
+  line-height:1.12!important;
+  padding:0!important;
+  min-height:34px;
+  border:0!important;
+  background:transparent!important;
+}
+.page-check-line{font-size:11px;margin-top:5px;font-weight:600}
+.page-heading-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:7px;
+  flex-wrap:wrap;
+}
+.page-heading-actions .btn{
+  min-height:38px;
+  padding:8px 15px!important;
+  font-size:12px;
+}
+.page-heading-actions .page-delete-button{
+  color:var(--eve-rose)!important;
+  border-color:var(--eve-rose-border)!important;
+}
+
+/* Blocks */
+.block-card{
+  padding:28px 30px 24px!important;
+  margin-bottom:16px!important;
+  border-radius:28px!important;
+  border:1.5px solid transparent!important;
+}
+.block-card.selected{
+  border-color:var(--eve-plum-500)!important;
+  box-shadow:0 12px 32px rgba(124,92,208,.13)!important;
+}
+.block-card:hover:not(.selected){border-color:var(--eve-plum-200)!important}
+.block-head{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  margin-bottom:20px;
+  padding-right:48px!important;
+  position:relative;
+}
+.canvas-block-drag-handle{
+  width:28px!important;
+  height:34px!important;
+  min-width:28px!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  color:var(--eve-plum-400)!important;
+  border-radius:10px!important;
+  display:grid!important;
+  place-items:center;
+  cursor:grab;
+}
+.canvas-block-drag-handle:hover{background:var(--eve-plum-100)!important;color:var(--eve-plum-700)!important}
+.canvas-block-drag-handle:active{cursor:grabbing}
+.block-meta-line{
+  min-height:27px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex-wrap:wrap;
+}
+.block-type{
+  margin:0!important;
+  padding:5px 10px!important;
+  font-size:9px!important;
+  letter-spacing:.12em!important;
+}
+.block-required-chip,.block-check,.builder-status{
+  min-height:24px;
+  display:inline-flex;
+  align-items:center;
+  border-radius:999px!important;
+  padding:4px 9px!important;
+  font-size:9px!important;
+  line-height:1!important;
+  font-weight:800!important;
+}
+.block-check.ready,.builder-status.ready{
+  background:var(--eve-sage-100)!important;
+  color:var(--eve-sage-dark)!important;
+  border:0!important;
+}
+.block-check.needs,.builder-status.needs{
+  background:#fff3f7!important;
+  color:var(--eve-rose)!important;
+  border:0!important;
+}
+.block-required-chip.required{background:#fff3f7!important;color:var(--eve-rose)!important;border:0!important}
+.block-required-chip.optional{background:var(--eve-plum-100)!important;color:var(--eve-secondary)!important;border:0!important}
+.block-head .inline-title{
+  width:100%;
+  margin-top:5px;
+  padding:1px 0!important;
+  min-height:34px;
+  border:0!important;
+  background:transparent!important;
+  font-size:23px!important;
+  line-height:1.15!important;
+}
+.block-actions{
+  display:flex!important;
+  align-items:center;
+  gap:7px;
+  margin-left:auto;
+}
+.section-order-controls{display:flex;gap:3px}
+.section-order-btn{
+  width:34px!important;
+  height:34px!important;
+  min-width:34px!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:999px!important;
+  background:var(--eve-plum-100)!important;
+  color:var(--eve-plum-700)!important;
+}
+.section-order-btn:hover:not(:disabled){background:var(--eve-plum-200)!important}
+.section-order-btn:disabled{opacity:.32!important}
+.section-page-move{
+  min-height:34px;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  padding:0 9px 0 11px;
+  border-radius:999px;
+  background:var(--eve-plum-100);
+  color:var(--eve-secondary);
+  font-size:9px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.section-page-move select{
+  height:28px;
+  border:0;
+  background:transparent;
+  color:var(--eve-ink);
+  font-weight:700;
+}
+.block-overflow-menu{top:0!important;right:0!important}
+.block-overflow-trigger{
+  width:36px!important;
+  height:36px!important;
+  min-width:36px!important;
+  border:0!important;
+  border-radius:999px!important;
+  background:var(--eve-plum-100)!important;
+  color:var(--eve-plum-700)!important;
+}
+.block-overflow-trigger:hover,.block-overflow-menu[open]>.block-overflow-trigger{
+  background:var(--eve-plum-200)!important;
+  color:var(--eve-plum-900)!important;
+}
+
+/* Form and rich editor cleanup */
+.field{margin-bottom:17px}
+.field>label,.rich-text-field>label{
+  display:block;
+  margin:0 0 7px;
+  color:var(--eve-ink);
+  font-size:12px;
+  font-weight:700;
+}
+.input,.textarea,.select{
+  min-height:44px!important;
+  border:1px solid var(--eve-border)!important;
+  border-radius:15px!important;
+  background:#fff!important;
+  color:var(--eve-body)!important;
+  padding:10px 13px!important;
+  font-size:14px!important;
+  box-shadow:none!important;
+}
+.input:hover,.textarea:hover,.select:hover{border-color:var(--eve-plum-300)!important}
+.input:focus,.textarea:focus,.select:focus{
+  border-color:var(--eve-plum-500)!important;
+  box-shadow:0 0 0 3px rgba(124,92,208,.10)!important;
+}
+.rich-editor-shell{
+  overflow:hidden;
+  border:1px solid var(--eve-border)!important;
+  border-radius:18px!important;
+  background:#fff!important;
+  box-shadow:none!important;
+  transition:border-color .15s,box-shadow .15s;
+}
+.rich-editor-shell:focus-within{
+  border-color:var(--eve-plum-400)!important;
+  box-shadow:0 0 0 3px rgba(124,92,208,.09)!important;
+}
+.rich-editor-toolbar{
+  min-height:42px;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:5px 8px!important;
+  border:0!important;
+  border-bottom:1px solid var(--eve-border)!important;
+  background:#faf8fd!important;
+}
+.rich-size-control select{
+  min-height:30px!important;
+  border:0!important;
+  border-radius:10px!important;
+  background:transparent!important;
+  color:var(--eve-secondary)!important;
+  padding:4px 26px 4px 8px!important;
+  font-size:11px!important;
+  font-weight:700;
+}
+.rich-toolbar-divider{height:20px!important;background:var(--eve-border)!important}
+.rich-format-btn{
+  width:31px!important;
+  height:31px!important;
+  min-width:31px!important;
+  display:grid!important;
+  place-items:center;
+  padding:0!important;
+  border:0!important;
+  border-radius:9px!important;
+  background:transparent!important;
+  color:var(--eve-body)!important;
+}
+.rich-format-btn:hover{background:var(--eve-plum-200)!important;color:var(--eve-plum-900)!important}
+.rich-editor{
+  min-height:104px!important;
+  padding:15px 17px!important;
+  border:0!important;
+  background:#fff!important;
+  color:var(--eve-body)!important;
+  font-size:14px!important;
+  line-height:1.6!important;
+}
+.rich-editor.compact{min-height:76px!important}
+
+/* Option and sub-item rows */
+.list-item,.mini-card.editable{
+  border:0!important;
+  border-radius:17px!important;
+  background:#faf8fd!important;
+  padding:8px 9px!important;
+  gap:7px!important;
+}
+.list-item+.list-item,.mini-card.editable+.mini-card.editable{margin-top:7px}
+.list-item .input,.mini-card.editable input{
+  min-height:40px!important;
+  border-color:transparent!important;
+  border-radius:13px!important;
+  background:#fff!important;
+}
+.list-item .drag,.mini-card .drag{
+  color:var(--eve-plum-400)!important;
+  opacity:.7;
+}
+.mini-reorder-controls{display:flex;gap:2px}
+.mini-reorder-btn{
+  width:28px!important;
+  height:28px!important;
+  min-width:28px!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:9px!important;
+  background:var(--eve-plum-100)!important;
+  color:var(--eve-plum-700)!important;
+  font-size:11px!important;
+}
+.mini-reorder-btn:disabled{opacity:.3}
+.list-item>.icon-btn,.mini-card>button:last-child{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  border:0!important;
+  border-radius:999px!important;
+  background:transparent!important;
+  color:var(--eve-hint)!important;
+}
+.list-item>.icon-btn:hover,.mini-card>button:last-child:hover{
+  background:#fff3f7!important;
+  color:var(--eve-rose)!important;
+}
+.block-card>.toolbar{gap:7px;margin-top:10px}
+.block-card>.toolbar .btn{min-height:38px;padding:8px 14px!important;font-size:12px}
+
+.response-placeholder{
+  min-height:92px;
+  display:flex;
+  align-items:flex-start;
+  padding:16px!important;
+  border:1.5px dashed var(--eve-plum-250)!important;
+  border-radius:18px!important;
+  background:#fbfafe!important;
+  color:var(--eve-hint)!important;
+}
+.response-placeholder.short{min-height:58px}
+
+.builder-issue-banner{
+  margin:-4px 0 17px!important;
+  padding:11px 13px!important;
+  border:0!important;
+  border-radius:15px!important;
+  background:#fff5f8!important;
+  color:var(--eve-rose)!important;
+}
+.insert-step-between{
+  display:block;
+  width:max-content;
+  margin:17px auto -7px;
+  padding:7px 13px;
+  border:0!important;
+  border-radius:999px!important;
+  background:transparent!important;
+  color:var(--eve-plum-600,var(--eve-plum-700))!important;
+  font-size:10px!important;
+  font-weight:700!important;
+  opacity:.72;
+}
+.insert-step-between:hover{background:var(--eve-plum-100)!important;opacity:1}
+.new-page-canvas{
+  margin-top:20px;
+  padding:24px 26px!important;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+.new-page-canvas>div{display:flex;flex-direction:column;gap:3px}
+.new-page-canvas b{font-family:var(--eve-font-display);font-size:18px;color:var(--eve-ink)}
+.new-page-canvas small{color:var(--eve-secondary)}
+
+/* Slightly richer shared buttons/cards */
+.btn{min-height:42px}
+.btn.primary,.btn-primary{box-shadow:0 7px 16px rgba(124,92,208,.24)!important}
+.card{box-shadow:0 2px 10px rgba(36,26,65,.055)!important}
+
+/* Keep the mobile-builder scroll fix authoritative after the theme loads. */
+@media(max-width:900px){
+  .topbar{min-height:68px}
+  .study-flow{top:68px}
+  .builder.vertical-pages.builder-two-column,.builder{
+    grid-template-columns:1fr!important;
+    height:auto!important;
+    display:block!important;
+    overflow:visible!important;
+  }
+  .outline-rail,.pane.structure{
+    max-height:none!important;
+    overflow:visible!important;
+  }
+  .canvas{height:auto!important;overflow:visible!important}
+  .block-head{padding-right:46px!important}
+}
+
+
+/* v54.0.2 · Legacy-style neutralisation + calmer Builder
+   The working canvas is intentionally low-colour: white content surfaces,
+   soft neutral separators, and plum only for focus/selection/actions. */
+
+/* Remove legacy blue/gradient/GDS-era styling that can still win on specific controls. */
+.switch{background:#ddd8e8!important;box-shadow:none!important}
+.switch.on{background:var(--eve-plum-500)!important}
+.segmented{background:#f1eef5!important;border:0!important}
+.segmented button{color:var(--eve-secondary)!important;border:0!important}
+.segmented button.active{background:#fff!important;color:var(--eve-ink)!important;box-shadow:0 1px 4px rgba(36,26,65,.08)!important}
+.choice,.tree-choice,.check-list,.sort-card{
+  background:#fff!important;
+  border:1px solid #e7e2ec!important;
+  box-shadow:none!important;
+}
+.choice:hover,.tree-choice:hover,.sort-card:hover{background:#faf9fc!important;border-color:var(--eve-plum-250)!important}
+.choice:has(input:checked),.tree-choice[aria-selected="true"]{
+  background:#fff!important;
+  border-color:var(--eve-plum-500)!important;
+  box-shadow:inset 4px 0 0 var(--eve-plum-500)!important;
+}
+.rating-scale-choice{
+  background:#fff!important;
+  border:1px solid #e2dce9!important;
+  color:var(--eve-body)!important;
+  box-shadow:none!important;
+}
+.rating-scale-choice:hover{background:#faf9fc!important;border-color:var(--eve-plum-300)!important}
+.rating-scale-choice.selected,.rating-scale-choice[aria-checked="true"]{
+  background:var(--eve-plum-500)!important;
+  border-color:var(--eve-plum-500)!important;
+  color:#fff!important;
+}
+.rating-scale-choice:focus-visible,
+.choice:focus-within,
+.tree-choice:focus-visible,
+.sort-card:focus-visible{
+  outline:2px solid var(--eve-plum-500)!important;
+  outline-offset:2px!important;
+  box-shadow:none!important;
+}
+.preference-card:has(input:checked){
+  background:#fff!important;
+  border-color:var(--eve-plum-500)!important;
+  box-shadow:0 0 0 2px rgba(124,92,208,.08)!important;
+}
+.matrix-row,.ranking-item,.sort-bank,.sort-group,.sort-bank-shell{
+  background:#fff!important;
+  border-color:#e7e2ec!important;
+  box-shadow:none!important;
+}
+.matrix-points span{background:#fff!important;border-color:#e4dfea!important;color:var(--eve-body)!important}
+.matrix-points input:checked+span{
+  background:#fff!important;
+  border-color:var(--eve-plum-500)!important;
+  color:var(--eve-plum-800)!important;
+  box-shadow:0 0 0 2px rgba(124,92,208,.08)!important;
+}
+.matrix-points input:focus-visible+span{outline:2px solid var(--eve-plum-500)!important;outline-offset:2px!important}
+
+/* Builder: one pale ground, white page/block surfaces. */
+.view-builder .builder{background:var(--eve-ground)!important}
+.view-builder .outline-rail,
+.view-builder .pane.structure{
+  background:#f4f1f8!important;
+  border-color:#e8e1ee!important;
+}
+.view-builder .canvas{
+  background:#f8f7fa!important;
+}
+.view-builder .canvas-inner{background:transparent!important}
+.view-builder .builder-page-section{background:transparent!important}
+.view-builder .page-canvas-heading{
+  background:#fff!important;
+  border:1px solid #e8e3ec!important;
+  box-shadow:0 1px 4px rgba(36,26,65,.035)!important;
+}
+.view-builder .builder-page-section.active .page-canvas-heading{
+  border-color:#d7ccef!important;
+  box-shadow:0 1px 4px rgba(36,26,65,.035)!important;
+}
+
+/* Outline is navigation, not another coloured content panel. */
+.view-builder .outline-page,
+.view-builder .outline-page.active{
+  background:transparent!important;
+  border-color:transparent!important;
+  box-shadow:none!important;
+}
+.view-builder .outline-page.active .outline-page-link{
+  background:#fff!important;
+  border:1px solid #e4dcec!important;
+  box-shadow:0 1px 5px rgba(36,26,65,.045)!important;
+}
+.view-builder .outline-page:not(.active) .outline-page-link:hover{background:rgba(255,255,255,.62)!important}
+.view-builder .outline-page-number{background:#fff!important;border:1px solid #e7e1ec!important}
+.view-builder .outline-step{background:transparent!important}
+.view-builder .outline-step:hover{background:rgba(255,255,255,.62)!important}
+.view-builder .outline-step.active{
+  background:#fff!important;
+  border:1px solid #e5dfeb!important;
+  box-shadow:none!important;
+}
+.view-builder .outline-step-index{background:#f0edf4!important;color:var(--eve-secondary)!important}
+
+/* Blocks: white by default. No coloured stripe or tinted interior. */
+.view-builder .block-card,
+.view-builder .block-card:hover,
+.view-builder .block-card.has-issues{
+  background:#fff!important;
+  border:1px solid #e8e3ec!important;
+  box-shadow:0 2px 8px rgba(36,26,65,.045)!important;
+}
+.view-builder .block-card:before{display:none!important}
+.view-builder .block-card.selected{
+  background:#fff!important;
+  border:1.5px solid var(--eve-plum-500)!important;
+  box-shadow:0 7px 20px rgba(124,92,208,.09)!important;
+}
+.view-builder .block-card:hover:not(.selected){border-color:#dbd3e3!important}
+.view-builder .block-card.has-issues:not(.selected){border-color:#eadde2!important}
+
+/* Tags remain informative without filling the block with colour. */
+.view-builder .block-type{
+  background:transparent!important;
+  border:1px solid #e6dfee!important;
+  color:var(--eve-plum-700)!important;
+}
+.view-builder .block-required-chip.optional{
+  background:transparent!important;
+  border:1px solid #e8e2ec!important;
+  color:var(--eve-secondary)!important;
+}
+.view-builder .block-required-chip.required{
+  background:transparent!important;
+  border:1px solid var(--eve-rose-border)!important;
+  color:var(--eve-rose)!important;
+}
+.view-builder .block-check.ready,.view-builder .builder-status.ready{
+  background:transparent!important;
+  border:1px solid #d9e2cc!important;
+  color:var(--eve-sage-dark)!important;
+}
+.view-builder .block-check.needs,.view-builder .builder-status.needs{
+  background:transparent!important;
+  border:1px solid var(--eve-rose-border)!important;
+  color:var(--eve-rose)!important;
+}
+
+/* Editing areas are white with subtle separators. */
+.view-builder .rich-editor-shell,
+.view-builder .rich-editor,
+.view-builder .rich-editor-toolbar{
+  background:#fff!important;
+}
+.view-builder .rich-editor-shell{border-color:#e7e1eb!important}
+.view-builder .rich-editor-toolbar{border-bottom-color:#ece7f0!important}
+.view-builder .rich-format-btn:hover{background:#f3f0f6!important}
+.view-builder .rich-size-control select{background:transparent!important}
+.view-builder .input,.view-builder .textarea,.view-builder .select{
+  background:#fff!important;
+  border-color:#e6e0e9!important;
+}
+.view-builder .input:hover,.view-builder .textarea:hover,.view-builder .select:hover{border-color:#d5cbe4!important}
+
+/* Answer rows: use white cards, not alternating lavender blocks. */
+.view-builder .list-item,
+.view-builder .mini-card.editable,
+.view-builder .matrix-row-editor,
+.view-builder .ranking-item,
+.view-builder .preference-card{
+  background:#fff!important;
+  border:1px solid #ece7ef!important;
+  box-shadow:none!important;
+}
+.view-builder .list-item .input,
+.view-builder .mini-card.editable input{
+  background:#fff!important;
+  border-color:#ebe5ee!important;
+}
+.view-builder .mini-reorder-btn,
+.view-builder .section-order-btn,
+.view-builder .block-overflow-trigger{
+  background:#f3f0f5!important;
+  color:var(--eve-secondary)!important;
+}
+.view-builder .mini-reorder-btn:hover:not(:disabled),
+.view-builder .section-order-btn:hover:not(:disabled),
+.view-builder .block-overflow-trigger:hover,
+.view-builder .block-overflow-menu[open]>.block-overflow-trigger{
+  background:#ebe5f2!important;
+  color:var(--eve-plum-800)!important;
+}
+.view-builder .section-page-move{background:#f5f2f7!important;color:var(--eve-secondary)!important}
+
+/* Complex Builder sub-panels should not look like separate purple blocks. */
+.view-builder .consent-builder-panel,
+.view-builder .panel-signup-builder,
+.view-builder .navigation-recording-builder,
+.view-builder .highlighter-meaning-builder,
+.view-builder .builder-type-note,
+.view-builder .response-placeholder,
+.view-builder .tree-preview,
+.view-builder .scale-builder-preview,
+.view-builder .screenout-note,
+.view-builder .ai-action{
+  background:#fbfafc!important;
+  border-color:#ece6ef!important;
+  box-shadow:none!important;
+}
+.view-builder .consent-confirmation-builder-row,
+.view-builder .navigation-recording-toggle-row,
+.view-builder .navigation-recording-builder-preview,
+.view-builder .highlighter-meaning-row{
+  background:#fff!important;
+  border-color:#ece6ef!important;
+}
+.view-builder .consent-count-badge,
+.view-builder .consent-checkbox-preview,
+.view-builder .navigation-recording-kind-icon,
+.view-builder .ranking-position{
+  background:#f1eef3!important;
+  color:var(--eve-secondary)!important;
+}
+.view-builder .navigation-recording-selected span{
+  background:#f1eef3!important;
+  color:var(--eve-secondary)!important;
+}
+
+/* Issue colour is reserved for the issue itself, not the whole block. */
+.view-builder .builder-issue-banner{
+  background:#fff!important;
+  border:1px solid var(--eve-rose-border)!important;
+  color:var(--eve-rose)!important;
+}
+.view-builder .insert-step-between{
+  background:transparent!important;
+  color:var(--eve-plum-700)!important;
+}
+.view-builder .insert-step-between:hover{background:#f1edf5!important}
+
+/* Remove remaining old blue focus/selection on high-specificity controls. */
+.view-builder .preference-card:focus-within,
+.view-builder .highlighter-colour-input:focus-within,
+.view-builder .highlighter-meaning-choice:focus-visible{
+  outline:2px solid var(--eve-plum-500)!important;
+  outline-offset:2px!important;
+}
+.view-builder .preference-card:has(input:checked){
+  background:#fff!important;
+  border-color:var(--eve-plum-500)!important;
+  box-shadow:0 0 0 2px rgba(124,92,208,.07)!important;
+}
+.view-builder .highlighter-meaning-builder{overflow:hidden}
+.view-builder .highlighter-meaning-list{border-top-color:#eee8f1!important}
+.view-builder .highlighter-meaning-row{border-bottom-color:#f0ebf3!important}
+
+/* Shared cards should never inherit old translucent blue glass treatment. */
+.card,.study-card,.template-card,.finding-card,.settings-card,.send-card,
+.result-card,.insight-item,.security-grid .card,.results-filterbar,.launch-checklist,
+.storage-provider-card,.connector-card,.archive-study-card{
+  backdrop-filter:none!important;
+  background:#fff!important;
+  border-color:#e7e1eb!important;
+  box-shadow:0 2px 8px rgba(36,26,65,.05)!important;
+}
+
+/* Tables and status panels become neutral rather than lilac-filled. */
+.data-table td,.participant-history-table td,.panel-table td{background:#fff!important}
+.data-table tbody tr:nth-child(even) td,
+.participant-history-table tbody tr:nth-child(even) td,
+.panel-table tbody tr:nth-child(even) td{background:#faf9fb!important}
+.data-table tbody tr:hover td,
+.participant-history-table tbody tr:hover td,
+.panel-table tbody tr:hover td{background:#f5f2f7!important}
+.segment-card,.panel-member-summary>div,.global-email-status,
+.email-test-panel,.email-template-group,.email-advanced-settings{
+  background:#faf9fb!important;
+  border:1px solid #e9e3ed!important;
+}
+
+/* Participant choices also lose the old blue/GDS residue while preserving semantics. */
+.participant-shell .choice,
+.participant-shell .tree-choice,
+.participant-shell .check-list{
+  background:#fff!important;
+  border:1px solid #e7e1eb!important;
+}
+.participant-shell .choice:hover,.participant-shell .tree-choice:hover{background:#faf9fc!important}
+.participant-shell .choice:has(input:checked),
+.participant-shell .tree-choice[aria-selected="true"]{
+  background:#fff!important;
+  border-color:var(--eve-plum-500)!important;
+  box-shadow:inset 4px 0 0 var(--eve-plum-500)!important;
+}
+.participant-shell .consent-choice,
+.participant-shell .panel-signup-terms{background:#faf9fb!important;border:1px solid #e9e3ed!important}
+
+
+/* v54.0.3 · Sidebar contrast + lighter study chrome */
+
+/* Sidebar: keep the rail deep plum, but make foregrounds warm off-white. */
+.sidebar{
+  color:#f7f2ff!important;
+}
+.sidebar .nav button,
+.sidebar .sidebar-footer-nav button,
+.sidebar .storage-chip{
+  color:#eee7f7!important;
+}
+.sidebar .nav button .eve-icon,
+.sidebar .sidebar-footer-nav button .eve-icon,
+.sidebar .storage-chip .eve-icon{
+  color:#f2ecf9!important;
+}
+.sidebar .nav button:hover,
+.sidebar .sidebar-footer-nav button:hover,
+.sidebar .storage-chip:hover{
+  color:#fff!important;
+  background:rgba(255,255,255,.09)!important;
+}
+.sidebar .nav button.active,
+.sidebar .sidebar-footer-nav button.active{
+  color:#fff!important;
+  background:rgba(255,255,255,.14)!important;
+  box-shadow:inset 3px 0 0 #fff!important;
+}
+.sidebar .nav button.active .eve-icon,
+.sidebar .sidebar-footer-nav button.active .eve-icon{
+  color:#fff!important;
+}
+.sidebar .nav button span,
+.sidebar .sidebar-footer-nav button span,
+.sidebar .storage-chip span{
+  color:inherit!important;
+}
+.sidebar .brand-sub,
+.sidebar .storage-chip small{
+  color:#d9cfea!important;
+}
+.sidebar .sidebar-collapse,
+.sidebar .theme-button{
+  color:#efe8f8!important;
+}
+.sidebar .sidebar-collapse:hover,
+.sidebar .theme-button:hover{
+  color:#fff!important;
+  background:rgba(255,255,255,.10)!important;
+}
+
+/* Study workspace top chrome: deliberately lighter than the sidebar. */
+.topbar{
+  background:#6f54a8!important;
+  color:#fff!important;
+  border-bottom:1px solid rgba(255,255,255,.16)!important;
+  box-shadow:none!important;
+}
+.topbar .topbar-study,
+.topbar .topbar-heading,
+.topbar .topbar-context,
+.topbar .save-state,
+.topbar .muted{
+  color:#f5f0fb!important;
+}
+.topbar .topbar-status,
+.topbar .topbar-version{
+  background:rgba(255,255,255,.15)!important;
+  color:#fff!important;
+  border-color:rgba(255,255,255,.20)!important;
+}
+.topbar .btn,
+.topbar .select,
+.topbar .icon-btn{
+  background:rgba(255,255,255,.12)!important;
+  color:#fff!important;
+  border-color:rgba(255,255,255,.22)!important;
+  box-shadow:none!important;
+}
+.topbar .btn:hover,
+.topbar .select:hover,
+.topbar .icon-btn:hover{
+  background:rgba(255,255,255,.20)!important;
+  color:#fff!important;
+}
+.topbar .btn.primary{
+  background:#f3f6d9!important;
+  color:#3b3155!important;
+  border-color:#f3f6d9!important;
+}
+.topbar .btn.primary:hover{
+  background:#fff!important;
+  color:#352a4e!important;
+}
+
+/* Workflow band is lighter again, creating clear depth between rail and workspace. */
+.study-flow{
+  background:#8067b6!important;
+  color:#fff!important;
+  border-bottom:1px solid rgba(255,255,255,.18)!important;
+  box-shadow:none!important;
+}
+.study-flow .flow-step{
+  color:#eee8f7!important;
+  background:transparent!important;
+  border:1px solid transparent!important;
+}
+.study-flow .flow-step:hover{
+  color:#fff!important;
+  background:rgba(255,255,255,.10)!important;
+}
+.study-flow .flow-step.active{
+  background:#fff!important;
+  color:#4a3675!important;
+  border-color:#fff!important;
+  box-shadow:0 4px 12px rgba(54,38,89,.12)!important;
+}
+.study-flow .flow-step.done{
+  color:#fff!important;
+}
+.study-flow .flow-num{
+  background:rgba(255,255,255,.16)!important;
+  color:#fff!important;
+}
+.study-flow .flow-step.active .flow-num{
+  background:#8b72c0!important;
+  color:#fff!important;
+}
+.study-flow .flow-step.done .flow-num{
+  background:#91a46f!important;
+  color:#fff!important;
+}
+
+/* The sidebar remains the darkest study-workspace surface. */
+.study-mode .sidebar,
+.view-builder .sidebar,
+.view-settings .sidebar,
+.view-send .sidebar,
+.view-review .sidebar{
+  background:#3b2768!important;
+}
+
+
+/* v54.0.4 · Off-white study chrome + circular flow numbers */
+
+/* Study top bar becomes soft off-white instead of plum-filled. */
+.topbar{
+  background:#fbf9f5!important;
+  color:var(--eve-ink)!important;
+  border-bottom:1px solid #e9e3dc!important;
+  box-shadow:0 1px 0 rgba(58,38,104,.025)!important;
+}
+.topbar .topbar-study,
+.topbar .topbar-heading,
+.topbar .topbar-context{
+  color:var(--eve-ink)!important;
+}
+.topbar .save-state,
+.topbar .muted{
+  color:var(--eve-secondary)!important;
+}
+.topbar .topbar-status,
+.topbar .topbar-version{
+  background:#f2edf7!important;
+  color:var(--eve-plum-800)!important;
+  border-color:#e4dced!important;
+}
+.topbar .btn,
+.topbar .select,
+.topbar .icon-btn{
+  background:#fff!important;
+  color:var(--eve-plum-800)!important;
+  border-color:#e3dce9!important;
+  box-shadow:none!important;
+}
+.topbar .btn:hover,
+.topbar .select:hover,
+.topbar .icon-btn:hover{
+  background:#f5f1f8!important;
+  color:var(--eve-plum-900)!important;
+  border-color:#d6cbe2!important;
+}
+.topbar .btn.primary{
+  background:#e9efc9!important;
+  color:#3f4a2e!important;
+  border-color:#dbe6ad!important;
+}
+.topbar .btn.primary:hover{
+  background:#f1f5da!important;
+  color:#354027!important;
+}
+
+/* Workflow bar becomes a slightly lilac off-white band. */
+.study-flow{
+  background:#f6f2f8!important;
+  color:var(--eve-body)!important;
+  border-bottom:1px solid #e6dfea!important;
+  box-shadow:none!important;
+}
+.study-flow .flow-step{
+  color:var(--eve-secondary)!important;
+  background:transparent!important;
+  border:1px solid transparent!important;
+}
+.study-flow .flow-step:hover{
+  color:var(--eve-plum-800)!important;
+  background:#eee8f3!important;
+}
+.study-flow .flow-step.active{
+  background:#fff!important;
+  color:var(--eve-plum-800)!important;
+  border-color:#ddd2e7!important;
+  box-shadow:0 3px 10px rgba(58,38,104,.07)!important;
+}
+.study-flow .flow-step.done{
+  color:var(--eve-body)!important;
+}
+
+/* Flow numbers are always true circles. */
+.study-flow .flow-num{
+  width:24px!important;
+  min-width:24px!important;
+  max-width:24px!important;
+  height:24px!important;
+  min-height:24px!important;
+  max-height:24px!important;
+  aspect-ratio:1 / 1!important;
+  display:inline-grid!important;
+  place-items:center!important;
+  padding:0!important;
+  border-radius:50%!important;
+  line-height:1!important;
+  box-sizing:border-box!important;
+  background:#e8e1ee!important;
+  color:var(--eve-plum-700)!important;
+}
+.study-flow .flow-step.active .flow-num{
+  background:var(--eve-plum-500)!important;
+  color:#fff!important;
+}
+.study-flow .flow-step.done .flow-num{
+  background:#9aac78!important;
+  color:#fff!important;
+}
+
+
+/* v54.0.5 · Flow-state hierarchy + polished study context */
+
+/* Workflow: the old hover treatment is now the resting/inactive treatment. */
+.study-flow .flow-step{
+  color:var(--eve-secondary)!important;
+  background:#eee8f3!important;
+  border:1px solid transparent!important;
+  box-shadow:none!important;
+}
+.study-flow .flow-step:hover,
+.study-flow .flow-step.active{
+  background:#fff!important;
+  color:var(--eve-plum-800)!important;
+  border-color:#ddd2e7!important;
+  box-shadow:0 3px 10px rgba(58,38,104,.07)!important;
+}
+.study-flow .flow-step.done{
+  color:var(--eve-body)!important;
+  background:#eee8f3!important;
+}
+.study-flow .flow-step.done:hover{
+  background:#fff!important;
+  color:var(--eve-plum-800)!important;
+  border-color:#ddd2e7!important;
+  box-shadow:0 3px 10px rgba(58,38,104,.07)!important;
+}
+
+/* Study identity becomes a deliberate plum context capsule in the off-white top bar. */
+.topbar .topbar-context{
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
+  min-width:0!important;
+  max-width:min(620px,56vw);
+  padding:7px 8px 7px 13px;
+  border:1px solid #684b97;
+  border-radius:999px;
+  background:#60448f!important;
+  color:#fff!important;
+  box-shadow:0 2px 7px rgba(58,38,104,.10);
+}
+.topbar .topbar-context .topbar-study{
+  max-width:min(410px,42vw);
+  color:#fff!important;
+  font-weight:700!important;
+  letter-spacing:.005em;
+}
+.topbar .topbar-context .topbar-status,
+.topbar .topbar-context .topbar-version{
+  min-height:27px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:5px 10px!important;
+  border-radius:999px!important;
+  font-size:10px!important;
+  line-height:1!important;
+  font-weight:800!important;
+  letter-spacing:.04em;
+  text-transform:capitalize;
+  box-shadow:none!important;
+}
+.topbar .topbar-context .topbar-status.draft{
+  background:#f4f0f8!important;
+  color:#513879!important;
+  border:1px solid #e0d5ea!important;
+}
+.topbar .topbar-context .topbar-status.live{
+  background:#dfe8c9!important;
+  color:#44532f!important;
+  border:1px solid #d1ddba!important;
+}
+.topbar .topbar-context .topbar-status.closed{
+  background:#ece8ef!important;
+  color:#665d6e!important;
+  border:1px solid #ded8e3!important;
+}
+.topbar .topbar-context .topbar-version{
+  background:rgba(255,255,255,.13)!important;
+  color:#fff!important;
+  border:1px solid rgba(255,255,255,.19)!important;
+}
+
+@media(max-width:760px){
+  .topbar .topbar-context{
+    max-width:100%;
+    padding:6px 7px 6px 11px;
+  }
+  .topbar .topbar-context .topbar-study{
+    max-width:min(52vw,300px);
+  }
+}
+
+
+/* v55.0.0 · Workflow Quality */
+
+/* Builder: make quality issues visible where researchers navigate the study. */
+.outline-quality{
+  margin:0 0 14px;
+  padding:12px;
+  border:1px solid #e6e0e9;
+  border-radius:18px;
+  background:#fff;
+  box-shadow:0 1px 5px rgba(36,26,65,.035);
+}
+.outline-quality-head{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+.outline-quality-head .status-mark{
+  width:28px;
+  height:28px;
+  min-width:28px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#eee8f3;
+  color:var(--eve-plum-700);
+  font-size:11px;
+  font-weight:800;
+}
+.outline-quality.ready .status-mark{
+  background:var(--eve-sage-100);
+  color:var(--eve-sage-dark);
+}
+.outline-quality-head>div{
+  display:flex;
+  flex-direction:column;
+  gap:1px;
+  min-width:0;
+}
+.outline-quality-head b{font-size:12px;color:var(--eve-ink)}
+.outline-quality-head small{font-size:10px;color:var(--eve-secondary)}
+.outline-quality>.text-btn{
+  margin:9px 0 0 37px;
+  padding:0;
+  font-size:10px;
+}
+.outline-quality-list{
+  display:grid;
+  gap:5px;
+  margin-top:10px;
+}
+.outline-quality-list>button{
+  width:100%;
+  display:grid;
+  grid-template-columns:23px minmax(0,1fr);
+  align-items:center;
+  gap:7px;
+  padding:7px;
+  border:0;
+  border-radius:12px;
+  background:#faf8fb;
+  color:var(--eve-body);
+  text-align:left;
+  cursor:pointer;
+}
+.outline-quality-list>button:hover{
+  background:#f0ebf4;
+}
+.outline-quality-list>button>span{
+  width:23px;
+  height:23px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#fff;
+  color:var(--eve-plum-700);
+  font-size:9px;
+  font-weight:800;
+  border:1px solid #e8e1ed;
+}
+.outline-quality-list>button>div{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:1px;
+}
+.outline-quality-list b{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:10px;
+  color:var(--eve-ink);
+}
+.outline-quality-list small{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:9px;
+  color:var(--eve-secondary);
+}
+
+/* Send: one launch-readiness view instead of scattered mental bookkeeping. */
+.launch-readiness{
+  margin:18px 0 20px;
+  padding:22px 24px!important;
+  border-color:#e6e0e9!important;
+}
+.launch-readiness.ready,
+.launch-readiness.live{
+  border-color:#dce5cf!important;
+}
+.launch-readiness-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:18px;
+  margin-bottom:16px;
+}
+.launch-readiness-head h3{
+  margin:3px 0 4px;
+}
+.launch-readiness-head p{
+  margin:0;
+  max-width:660px;
+  color:var(--eve-secondary);
+  font-size:13px;
+}
+.launch-readiness-score{
+  width:56px;
+  height:56px;
+  min-width:56px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#f0ebf4;
+  color:var(--eve-plum-800);
+  font-family:var(--eve-font-display);
+  font-size:17px;
+}
+.launch-readiness.ready .launch-readiness-score,
+.launch-readiness.live .launch-readiness-score{
+  background:var(--eve-sage-100);
+  color:var(--eve-sage-dark);
+}
+.launch-readiness-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+}
+.launch-check{
+  min-width:0;
+  display:grid;
+  grid-template-columns:32px minmax(0,1fr) auto;
+  align-items:center;
+  gap:10px;
+  padding:11px 12px;
+  border:1px solid #e9e4ec;
+  border-radius:16px;
+  background:#faf9fb;
+  color:var(--eve-body);
+  text-align:left;
+}
+button.launch-check{cursor:pointer}
+button.launch-check:hover{
+  background:#f4f0f7;
+  border-color:#ddd3e6;
+}
+.launch-check-mark{
+  width:30px;
+  height:30px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#f1edf3;
+  color:var(--eve-secondary);
+  font-weight:800;
+  font-size:11px;
+}
+.launch-check.ready .launch-check-mark{
+  background:var(--eve-sage-100);
+  color:var(--eve-sage-dark);
+}
+.launch-check.attention .launch-check-mark{
+  background:#fff5f8;
+  color:var(--eve-rose);
+}
+.launch-check.checking .launch-check-mark{
+  background:#f0ebf4;
+  color:var(--eve-plum-700);
+}
+.launch-check>div{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.launch-check b{font-size:12px;color:var(--eve-ink)}
+.launch-check small{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:10px;
+  color:var(--eve-secondary);
+}
+.launch-check em{
+  font-style:normal;
+  font-size:10px;
+  font-weight:700;
+  color:var(--eve-plum-700);
+}
+
+/* Review: make the evidence -> insight loop persistent and obvious. */
+.review-evidence-tray{
+  margin:14px 0 18px;
+  padding:20px 22px!important;
+  border-color:#e5deea!important;
+}
+.review-evidence-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:16px;
+}
+.review-evidence-head h3{margin:3px 0 4px}
+.review-evidence-head p{
+  margin:0;
+  color:var(--eve-secondary);
+  font-size:12px;
+  max-width:650px;
+}
+.review-evidence-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.review-evidence-list{
+  display:grid;
+  gap:7px;
+  margin-top:14px;
+}
+.review-evidence-list>button{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:11px;
+  width:100%;
+  padding:10px 12px;
+  border:0;
+  border-radius:15px;
+  background:#faf8fb;
+  color:var(--eve-body);
+  text-align:left;
+  cursor:pointer;
+}
+.review-evidence-list>button:hover{background:#f1edf5}
+.review-evidence-section{
+  padding:5px 9px;
+  border:1px solid #e5deea;
+  border-radius:999px;
+  background:#fff;
+  color:var(--eve-plum-700);
+  font-size:9px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.review-evidence-list>button>div{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.review-evidence-list b{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:12px;
+  color:var(--eve-ink);
+}
+.review-evidence-list small{
+  color:var(--eve-secondary);
+  font-size:10px;
+}
+.review-evidence-list em{
+  font-style:normal;
+  color:var(--eve-plum-700);
+  font-size:10px;
+  font-weight:700;
+}
+.review-quote footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.quote-insight-action{
+  flex:none;
+  font-size:11px!important;
+  color:var(--eve-plum-700)!important;
+}
+
+/* Global Settings: consistent health language across integrations. */
+.integration-health{
+  margin:0 0 18px;
+  padding:22px 24px!important;
+}
+.integration-health-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:18px;
+  margin-bottom:15px;
+}
+.integration-health-head h3{margin:3px 0 4px}
+.integration-health-head p{
+  margin:0;
+  color:var(--eve-secondary);
+  font-size:12px;
+}
+.integration-health-score{
+  width:54px;
+  height:54px;
+  min-width:54px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#f0ebf4;
+  color:var(--eve-plum-800);
+  font-family:var(--eve-font-display);
+  font-size:17px;
+}
+.integration-health-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:9px;
+}
+.integration-health-item{
+  display:grid;
+  grid-template-columns:31px minmax(0,1fr) auto;
+  align-items:center;
+  gap:10px;
+  padding:11px 12px;
+  border:1px solid #e9e3ec;
+  border-radius:16px;
+  background:#faf9fb;
+}
+.integration-health-mark{
+  width:29px;
+  height:29px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#f0ebf4;
+  color:var(--eve-plum-700);
+  font-size:11px;
+  font-weight:800;
+}
+.integration-health-item.ready .integration-health-mark{
+  background:var(--eve-sage-100);
+  color:var(--eve-sage-dark);
+}
+.integration-health-item.attention .integration-health-mark{
+  background:#fff5f8;
+  color:var(--eve-rose);
+}
+.integration-health-item.off .integration-health-mark{
+  background:#ece8ef;
+  color:var(--eve-secondary);
+}
+.integration-health-item>div{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.integration-health-item b{font-size:12px;color:var(--eve-ink)}
+.integration-health-item small{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:10px;
+  color:var(--eve-secondary);
+}
+
+@media(max-width:900px){
+  .launch-readiness-grid,
+  .integration-health-grid{grid-template-columns:1fr}
+  .review-evidence-head,
+  .launch-readiness-head,
+  .integration-health-head{flex-direction:column}
+}
+
+
+/* v55.1.0 · Preview fidelity + participant session clarity */
+
+/* Preview is a frame around the actual participant visual language. */
+.preview{
+  width:min(1180px,calc(100vw - 48px))!important;
+  max-height:calc(100vh - 48px)!important;
+  overflow:hidden!important;
+}
+.preview-main{
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  max-height:calc(100vh - 48px);
+}
+.preview-header{
+  flex:none;
+  padding:18px 22px!important;
+  border-bottom:1px solid #ece7ef!important;
+  background:#fff!important;
+}
+.preview-controls{
+  display:flex!important;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.preview-mode-banner{
+  flex:none;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 22px;
+  border-bottom:1px solid #e7e1eb;
+  background:#f7f4f9;
+  color:var(--eve-secondary);
+  font-size:11px;
+}
+.preview-mode-banner>span{
+  padding:4px 8px;
+  border-radius:999px;
+  background:var(--eve-plum-500);
+  color:#fff;
+  font-size:9px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.preview-mode-banner b{color:var(--eve-ink);font-size:11px}
+.preview-mode-banner small{margin-left:auto;color:var(--eve-secondary)}
+.preview-participant-shell{
+  min-height:0!important;
+  flex:1;
+  overflow:auto;
+  padding-bottom:28px!important;
+  background:var(--eve-ground)!important;
+}
+.preview-participant-shell .participant-top{
+  position:sticky;
+  top:0;
+  z-index:2;
+  background:rgba(247,244,249,.92)!important;
+  backdrop-filter:blur(10px);
+}
+.preview-participant-shell .participant-runtime{
+  max-width:900px;
+  padding-top:8px;
+}
+.preview-participant-shell .participant-card{
+  margin:0 auto;
+}
+.preview-participant-shell.mobile-preview .participant-top,
+.preview-participant-shell.mobile-preview .participant-runtime{
+  max-width:430px!important;
+}
+.preview-participant-shell.mobile-preview .participant-runtime{
+  padding-left:12px!important;
+  padding-right:12px!important;
+}
+.preview-participant-shell.mobile-preview .participant-card{
+  padding:24px 20px!important;
+  border-radius:28px!important;
+}
+.preview-participant-shell.mobile-preview .participant-study-title h1{
+  font-size:30px!important;
+}
+.preview-participant-shell.mobile-preview .participant-page-heading h2{
+  font-size:24px!important;
+}
+.preview-device-control{flex:none}
+.preview-progress-meta{margin-top:0!important}
+.preview-study-page{
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  background:transparent!important;
+}
+.preview-study-page+.preview-study-page{margin-top:0!important}
+.preview-screenout-end{
+  margin:20px 0;
+  padding:15px;
+  border:1px solid #eadfe4;
+  border-radius:16px;
+  background:#fff7f9;
+}
+.preview-completion-state{
+  padding:32px 0 10px;
+  text-align:center;
+}
+
+/* Participant autosave/resume status is explicit and trustworthy. */
+.participant-session-status{
+  display:grid;
+  grid-template-columns:12px minmax(0,1fr);
+  align-items:center;
+  gap:9px;
+  margin:0 0 12px;
+  padding:9px 12px;
+  border:1px solid #e7e1eb;
+  border-radius:14px;
+  background:#fbfafc;
+}
+.participant-session-dot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#9aac78;
+  box-shadow:0 0 0 3px rgba(154,172,120,.13);
+}
+.participant-session-status>div{
+  display:flex;
+  flex-direction:column;
+  gap:1px;
+  min-width:0;
+}
+.participant-session-status b{
+  font-size:11px;
+  color:var(--eve-ink);
+}
+.participant-session-status small{
+  font-size:10px;
+  color:var(--eve-secondary);
+}
+.participant-session-status[data-state="saving"] .participant-session-dot,
+.participant-session-status[data-state="submitting"] .participant-session-dot{
+  background:var(--eve-plum-500);
+  box-shadow:0 0 0 3px rgba(124,92,208,.12);
+  animation:eve-session-pulse 1.2s ease-in-out infinite;
+}
+.participant-session-status[data-state="restored"]{
+  border-color:#ddd3e7;
+  background:#f7f3fa;
+}
+.participant-session-status[data-state="restored"] .participant-session-dot{
+  background:var(--eve-plum-500);
+  box-shadow:0 0 0 3px rgba(124,92,208,.12);
+}
+.participant-session-status[data-state="error"]{
+  border-color:var(--eve-rose-border);
+  background:#fff8fa;
+}
+.participant-session-status[data-state="error"] .participant-session-dot{
+  background:var(--eve-rose);
+  box-shadow:0 0 0 3px rgba(181,81,108,.10);
+}
+@keyframes eve-session-pulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.5;transform:scale(.82)}
+}
+
+/* Review: saved evidence clearly remains connected to its insight. */
+.review-quote{
+  position:relative;
+}
+.review-quote.has-saved-insight{
+  border-color:#dce5cf!important;
+  background:#fcfdf9!important;
+}
+.quote-insight-action.saved{
+  color:var(--eve-sage-dark)!important;
+  font-weight:800!important;
+}
+.review-evidence-tray{
+  margin-top:14px!important;
+}
+
+/* Retire old duplicated workflow affordances now v55 owns them. */
+.outline-issue-link,
+.outline-ready,
+.send-fix-strip,
+.review-insight-capture-tip{
+  display:none!important;
+}
+
+@media(max-width:760px){
+  .preview{width:calc(100vw - 20px)!important;max-height:calc(100vh - 20px)!important}
+  .preview-main{max-height:calc(100vh - 20px)}
+  .preview-header{align-items:flex-start!important;gap:10px!important}
+  .preview-mode-banner{align-items:flex-start;flex-wrap:wrap;padding:9px 14px}
+  .preview-mode-banner small{width:100%;margin-left:0}
+  .preview-controls{justify-content:flex-start}
+  .participant-session-status{margin-left:0;margin-right:0}
+}
+
+
+/* v55.2.0 · Consistency + accessibility */
+
+/* Skip navigation becomes available to keyboard users without adding visual chrome. */
+.skip-link{
+  position:fixed;
+  left:16px;
+  top:12px;
+  z-index:5000;
+  padding:10px 16px;
+  border-radius:999px;
+  background:#fff;
+  color:var(--eve-plum-900);
+  border:1px solid var(--eve-plum-250);
+  box-shadow:0 8px 18px rgba(36,26,65,.14);
+  font-size:13px;
+  font-weight:800;
+  transform:translateY(-160%);
+  transition:transform .14s ease;
+}
+.skip-link:focus{
+  transform:translateY(0);
+}
+
+/* One explicit focus language across the whole workspace. */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible{
+  outline:2px solid var(--eve-plum-500)!important;
+  outline-offset:2px!important;
+}
+.sidebar button:focus-visible,
+.topbar button:focus-visible{
+  outline-color:#fff!important;
+}
+#eve-main:focus{outline:none!important}
+
+/* SVG icon containers now behave consistently wherever the old glyph boxes lived. */
+.settings-card-icon,
+.template-icon,
+.empty-icon,
+.review-overview-icon,
+.send-segment-summary-icon,
+.setting-icon,
+.navigation-recording-kind-icon{
+  display:inline-grid!important;
+  place-items:center!important;
+}
+.settings-card-icon .eve-icon,
+.template-icon .eve-icon,
+.empty-icon .eve-icon,
+.review-overview-icon .eve-icon,
+.send-segment-summary-icon .eve-icon,
+.setting-icon .eve-icon,
+.navigation-recording-kind-icon .eve-icon{
+  display:block;
+}
+.settings-card-icon{
+  color:var(--eve-plum-700)!important;
+}
+.template-icon{
+  color:var(--eve-plum-700)!important;
+}
+.empty-icon{
+  color:var(--eve-plum-400)!important;
+}
+.repository-search>span{
+  display:grid;
+  place-items:center;
+  color:var(--eve-hint);
+}
+.ai-action>span{
+  display:grid!important;
+  place-items:center!important;
+  color:var(--eve-plum-700)!important;
+}
+.panel-signup-runtime-head>span{
+  display:grid!important;
+  place-items:center!important;
+  color:var(--eve-plum-700)!important;
+}
+.recording-review-meta>span,
+.navigation-recording-selected>span{
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:6px!important;
+}
+
+/* Review navigation remains available while evidence scrolls beneath it. */
+.review-tabs{
+  position:sticky;
+  top:148px;
+  z-index:18;
+  margin:0 0 14px!important;
+  padding:6px!important;
+  border:1px solid rgba(224,215,244,.92)!important;
+  border-radius:999px!important;
+  background:rgba(255,255,255,.92)!important;
+  backdrop-filter:blur(12px);
+  box-shadow:0 4px 14px rgba(36,26,65,.06);
+}
+.review-tab{
+  min-height:38px;
+}
+.review-tab[aria-selected="true"]{
+  background:var(--eve-plum-900)!important;
+  color:#fff!important;
+}
+.review-tab[aria-selected="false"]:hover{
+  background:var(--eve-plum-100)!important;
+  color:var(--eve-plum-800)!important;
+}
+.review-tab b{
+  min-width:21px;
+  height:21px;
+  display:inline-grid;
+  place-items:center;
+  padding:0 6px!important;
+  border-radius:999px!important;
+  background:#f1edf5!important;
+  color:var(--eve-secondary)!important;
+}
+.review-tab[aria-selected="true"] b{
+  background:rgba(255,255,255,.16)!important;
+  color:#fff!important;
+}
+
+/* Method cards now use the same icon language and less decorative clutter. */
+.review-overview-icon{
+  width:42px!important;
+  height:42px!important;
+  border-radius:14px!important;
+  background:#f3eff6!important;
+  color:var(--eve-plum-700)!important;
+}
+.review-overview-card>i{
+  display:grid!important;
+  place-items:center!important;
+  color:var(--eve-plum-500)!important;
+}
+
+/* Empty states are quieter and easier to scan. */
+.empty-state .empty-icon{
+  width:52px;
+  height:52px;
+  margin:0 auto 12px;
+  border-radius:18px;
+  background:#f4f0f7;
+}
+.empty-state h3{margin-bottom:6px}
+.empty-state p{
+  max-width:520px;
+  margin-left:auto;
+  margin-right:auto;
+  color:var(--eve-secondary);
+}
+
+/* Don't expose review navigation for study methods that aren't present. */
+.review-tabs .review-tab:only-child{
+  min-width:120px;
+}
+
+/* Keep sticky review controls below mobile chrome rather than covering it. */
+@media(max-width:900px){
+  .review-tabs{
+    top:76px;
+    overflow-x:auto;
+    justify-content:flex-start!important;
+    border-radius:20px!important;
+    scrollbar-width:none;
+  }
+  .review-tabs::-webkit-scrollbar{display:none}
+  .review-tab{flex:none}
+}
+
+
+/* v55.3.0 · Operational clarity */
+
+/* Studies are action cards, not passive summaries. */
+.study-card{
+  min-height:0!important;
+}
+.study-card-top{
+  padding-bottom:2px;
+}
+.study-card .pill{
+  max-width:75%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.study-next-action{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 34px;
+  align-items:center;
+  gap:10px;
+  margin:0 14px 14px;
+  padding:11px 12px 11px 14px;
+  border:1px solid #e9e4ec;
+  border-radius:17px;
+  background:#faf9fb;
+}
+.study-next-action>div{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.study-next-action b{
+  font-size:11px;
+  color:var(--eve-ink);
+}
+.study-next-action small{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:10px;
+  color:var(--eve-secondary);
+}
+.study-next-button{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border:0;
+  border-radius:50%;
+  background:#efebf3;
+  color:var(--eve-plum-700);
+  cursor:pointer;
+}
+.study-next-button:hover{
+  background:var(--eve-plum-500);
+  color:#fff;
+}
+.study-next-action.ready{
+  border-color:#dde6d0;
+  background:#fbfcf8;
+}
+.study-next-action.ready .study-next-button{
+  background:var(--eve-sage-100);
+  color:var(--eve-sage-dark);
+}
+.study-next-action.ready .study-next-button:hover{
+  background:#91a46f;
+  color:#fff;
+}
+.study-next-action.attention{
+  border-color:#eadfe4;
+  background:#fffafb;
+}
+.study-next-action.attention .study-next-button{
+  background:#f6eaf0;
+  color:var(--eve-rose);
+}
+.study-next-action.live{
+  border-color:#dce5cf;
+  background:#fbfdf8;
+}
+.study-next-action.live .study-next-button{
+  background:#9aac78;
+  color:#fff;
+}
+.study-card[data-study-status="live"]{
+  border-color:#dce5cf!important;
+}
+.study-card[data-study-status="closed"]{
+  border-color:#ece7ef!important;
+}
+
+/* Needs You becomes a compact task list with clear destinations. */
+.home-needs{
+  overflow:hidden;
+}
+.home-needs h3{
+  margin-bottom:9px!important;
+}
+.needs-row.needs-action{
+  width:100%;
+  display:grid;
+  grid-template-columns:10px minmax(0,1fr);
+  gap:11px;
+  align-items:start;
+  padding:10px 8px;
+  border:0;
+  border-radius:14px;
+  background:transparent;
+  color:inherit;
+  text-align:left;
+  cursor:pointer;
+}
+.needs-row.needs-action:hover{
+  background:#f6f2f8;
+}
+.needs-copy{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.needs-copy b{
+  color:var(--eve-body);
+  font-size:12px;
+  line-height:1.4;
+  font-weight:650;
+}
+.needs-copy small{
+  display:flex;
+  align-items:center;
+  gap:3px;
+  color:var(--eve-plum-700);
+  font-size:10px;
+  font-weight:800;
+}
+.needs-copy small .eve-icon{
+  width:12px;
+  height:12px;
+}
+.needs-action .needs-dot{
+  margin-top:4px;
+}
+
+/* Archive follows the same icon/component language as the rest of v55. */
+.archive-box-icon,
+.archive-retention-icon{
+  display:grid!important;
+  place-items:center!important;
+  color:var(--eve-plum-700)!important;
+}
+.archive-retention-icon{
+  width:38px;
+  height:38px;
+  border-radius:14px;
+  background:#f2eef5;
+}
+.archive-box-icon{
+  width:38px;
+  height:38px;
+  border-radius:14px;
+  background:#f4f1f6;
+}
+
+/* Correct completed Study Flow styling to match the actual `complete` class. */
+.study-flow .flow-step.complete:not(.active){
+  color:var(--eve-body)!important;
+  background:#eee8f3!important;
+}
+.study-flow .flow-step.complete:not(.active) .flow-num{
+  background:#9aac78!important;
+  color:#fff!important;
+}
+.study-flow .flow-step.complete:hover{
+  background:#fff!important;
+  color:var(--eve-plum-800)!important;
+  border-color:#ddd2e7!important;
+  box-shadow:0 3px 10px rgba(58,38,104,.07)!important;
+}
+.study-flow .flow-line.complete{
+  background:#b8c69d!important;
+}
+
+/* Status pills: Off is intentionally neutral. */
+.topbar .topbar-context .topbar-status.closed{
+  text-transform:none!important;
+}
+.study-filter-segments button{
+  white-space:nowrap;
+}
+
+@media(max-width:760px){
+  .study-next-action{
+    margin-left:12px;
+    margin-right:12px;
+  }
+}
+
+
+/* v55.4.0 · Reliability hardening */
+
+button[aria-busy="true"]{
+  cursor:wait!important;
+  opacity:.72!important;
+  pointer-events:none!important;
+}
+button[aria-busy="true"] .eve-icon{
+  opacity:.65;
+}
+
+
+/* v56.3 · Recoverable participant submission */
+.participant-session-status .participant-pending-retry{
+  grid-column:2;
+  justify-self:start;
+  margin-top:5px;
+  min-height:32px;
+  padding:6px 11px;
+}
+.participant-session-status[data-state="error"] .participant-pending-retry{
+  background:#fff!important;
+  border-color:var(--eve-rose-border)!important;
+  color:var(--eve-rose)!important;
+}
+.participant-session-status[data-state="submitting"]{
+  border-color:#ddd3e7;
+  background:#f8f5fa;
+}

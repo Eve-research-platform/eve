@@ -1,0 +1,14 @@
+{
+  "name": "eve-research",
+  "env": {
+    "EVE_BOOTSTRAP_EMAIL": {"description": "Email for the first Eve administrator", "order": 10},
+    "EVE_ORG_NAME": {"description": "Organisation or research workspace name", "value": "Eve research workspace", "order": 20},
+    "EVE_BOOTSTRAP_PASSWORD": {"description": "Temporary first-admin password (12+ characters; change after first sign-in)", "order": 30},
+    "EVE_CONNECTOR_SECRET": {"description": "Generated automatically to protect connector credentials", "generator": "secret", "order": 40},
+    "EVE_DATABASE_PASSWORD": {"description": "Generated automatically for Eve PostgreSQL", "generator": "secret", "order": 50},
+    "NODE_ENV": {"value": "production", "required": false, "order": 90},
+    "EVE_LIVE_MODE": {"value": "false", "required": false, "order": 91}
+  },
+  "options": {"allow-unauthenticated": false, "memory": "2Gi", "cpu": "1", "port": 8787, "concurrency": 80, "max-instances": 3},
+  "hooks": {"postcreate": {"commands": ["bash deploy/google/cloud-run-button-finalize.sh"]}}
+}

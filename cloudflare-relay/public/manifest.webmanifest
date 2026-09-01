@@ -1,0 +1,18 @@
+{
+  "name": "Eve Research",
+  "short_name": "Eve",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f5fb",
+  "theme_color": "#3a2668",
+  "description": "A privacy-first user research workspace.",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

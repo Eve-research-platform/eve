@@ -1,0 +1,1112 @@
+/* Eve v56.4 · Platform polish layer
+   This file intentionally loads after the base and v54 theme styles.
+   It owns finishing behaviour: density, interaction hierarchy, responsive
+   polish and reduced-motion handling. It does not redefine Eve's visual identity. */
+
+:root{
+  --eve-control-h:44px;
+  --eve-control-radius:14px;
+  --eve-card-gap:18px;
+  --eve-focus-ring:0 0 0 3px rgba(124,92,208,.14);
+  --eve-hover-lift:translateY(-1px);
+  --eve-shadow-hover:0 10px 28px rgba(36,26,65,.09);
+}
+
+/* Global rhythm ------------------------------------------------------- */
+html{scroll-behavior:smooth}
+body{
+  line-height:1.5;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+}
+.content{
+  width:100%;
+  max-width:1480px;
+  margin-inline:auto;
+}
+.content.narrow{max-width:960px}
+.hero,.home-welcome,.send-hero{
+  margin-bottom:22px!important;
+}
+.hero h2,.home-welcome h2,.send-hero h2{
+  text-wrap:balance;
+  line-height:1.08!important;
+}
+.hero .muted,.home-welcome .muted,.send-hero .muted{
+  max-width:760px;
+  line-height:1.55;
+}
+.eyebrow{
+  letter-spacing:.09em!important;
+  font-weight:800!important;
+}
+.muted.small,.small.muted{line-height:1.45}
+
+/* Cards --------------------------------------------------------------- */
+.card{
+  border:1px solid rgba(224,215,244,.78)!important;
+  box-shadow:0 2px 9px rgba(36,26,65,.035)!important;
+}
+.card,
+.settings-card,
+.storage-provider-card,
+.connector-card,
+.template-card,
+.finding-card{
+  transition:border-color .16s ease,box-shadow .16s ease,transform .16s ease,background-color .16s ease;
+}
+button.card,
+.study-card,
+.template-card,
+.review-overview-card,
+.launch-check,
+.review-evidence-list>button{
+  -webkit-tap-highlight-color:transparent;
+}
+.study-card:hover,
+.template-card:hover,
+.review-overview-card:hover{
+  transform:var(--eve-hover-lift);
+  box-shadow:var(--eve-shadow-hover)!important;
+  border-color:var(--eve-plum-250)!important;
+}
+.settings-card:hover,
+.storage-provider-card:hover,
+.connector-card:hover{
+  border-color:rgba(193,171,238,.7)!important;
+}
+.settings-card>h3,
+.storage-provider-card h3,
+.connector-card h3{
+  margin-top:7px!important;
+  margin-bottom:6px!important;
+}
+.settings-card>p,
+.storage-provider-card p,
+.connector-card p{
+  line-height:1.55!important;
+}
+
+/* Buttons ------------------------------------------------------------- */
+.btn,
+.icon-btn,
+.text-btn,
+.study-next-button,
+.review-tab,
+.study-filter-segments button{
+  font-family:var(--eve-font-body)!important;
+}
+.btn{
+  min-height:var(--eve-control-h)!important;
+  padding:0 16px!important;
+  display:inline-flex!important;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  border-radius:var(--eve-control-radius)!important;
+  font-size:12px!important;
+  font-weight:750!important;
+  letter-spacing:.005em;
+  white-space:nowrap;
+  transition:transform .12s ease,box-shadow .14s ease,background-color .14s ease,border-color .14s ease,color .14s ease,opacity .14s ease;
+}
+.btn:not(:disabled):active,
+.icon-btn:not(:disabled):active,
+.study-next-button:not(:disabled):active{
+  transform:translateY(1px);
+}
+.btn.primary{
+  box-shadow:0 3px 9px rgba(79,52,144,.14)!important;
+}
+.btn.primary:hover:not(:disabled){
+  box-shadow:0 6px 16px rgba(79,52,144,.18)!important;
+  transform:translateY(-1px);
+}
+.btn.subtle{
+  background:#f7f4f9!important;
+  border-color:#e9e2ee!important;
+}
+.btn.subtle:hover:not(:disabled){
+  background:#f0ebf4!important;
+  border-color:#ddd2e7!important;
+}
+.btn.danger-outline,
+.danger-outline{
+  background:#fff!important;
+  color:var(--eve-rose)!important;
+  border-color:var(--eve-rose-border)!important;
+  box-shadow:none!important;
+}
+.btn.danger-outline:hover:not(:disabled){
+  background:#fff8fa!important;
+  border-color:#d7b7c4!important;
+}
+.icon-btn{
+  min-width:38px!important;
+  min-height:38px!important;
+  display:inline-grid!important;
+  place-items:center!important;
+  padding:0!important;
+  border-radius:12px!important;
+  transition:background-color .14s ease,color .14s ease,border-color .14s ease,transform .12s ease;
+}
+.icon-btn:hover:not(:disabled){
+  background:#f0ebf4!important;
+  color:var(--eve-plum-800)!important;
+}
+.text-btn{
+  min-height:32px;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  font-weight:750!important;
+  text-underline-offset:3px;
+}
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled{
+  opacity:.52!important;
+  cursor:not-allowed!important;
+}
+.toolbar{
+  display:flex;
+  align-items:center;
+  gap:9px!important;
+  flex-wrap:wrap;
+}
+.toolbar>.spacer{flex:1 1 auto}
+
+/* Form controls ------------------------------------------------------- */
+.field{
+  gap:6px!important;
+  margin-bottom:16px;
+}
+.field>label,
+.field>span:first-child,
+label.field>span:first-child{
+  color:var(--eve-body)!important;
+  font-size:11px!important;
+  font-weight:800!important;
+  line-height:1.3;
+}
+.input,
+.select,
+textarea.input,
+.field input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+.field select,
+.field textarea{
+  min-height:var(--eve-control-h)!important;
+  border-radius:var(--eve-control-radius)!important;
+  border:1px solid #ded8e3!important;
+  background:#fff!important;
+  color:var(--eve-ink)!important;
+  font-size:13px!important;
+  transition:border-color .14s ease,box-shadow .14s ease,background-color .14s ease;
+}
+textarea.input,
+.field textarea{
+  min-height:104px!important;
+  padding-top:12px!important;
+  resize:vertical;
+}
+.input:hover:not(:disabled),
+.select:hover:not(:disabled),
+textarea:hover:not(:disabled){
+  border-color:#cfc4db!important;
+}
+.input:focus,
+.select:focus,
+textarea:focus,
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:var(--eve-plum-500)!important;
+  box-shadow:var(--eve-focus-ring)!important;
+}
+.field-hint,
+.field small,
+.settings-card small,
+.settings-note small{
+  line-height:1.45!important;
+}
+input[type="checkbox"],
+input[type="radio"]{
+  accent-color:var(--eve-plum-700);
+}
+
+/* Status + pills ------------------------------------------------------ */
+.pill,
+.status-pill,
+.topbar-status,
+.topbar-version{
+  line-height:1!important;
+}
+.pill{
+  min-height:27px;
+  display:inline-flex;
+  align-items:center;
+  padding:6px 10px!important;
+  border-radius:999px!important;
+  font-size:10px!important;
+  font-weight:800!important;
+}
+.status-dot{
+  flex:none;
+}
+.settings-note{
+  border-radius:16px!important;
+  line-height:1.5!important;
+}
+
+/* Top chrome ---------------------------------------------------------- */
+.topbar{
+  min-height:78px!important;
+}
+.topbar .toolbar{
+  justify-content:flex-end;
+}
+.topbar-context{
+  min-width:0;
+}
+.topbar-context .topbar-study{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.study-flow{
+  min-height:58px;
+}
+.study-flow .flow-step{
+  min-height:42px!important;
+  padding:7px 12px!important;
+  transition:background-color .14s ease,border-color .14s ease,box-shadow .14s ease,transform .12s ease;
+}
+.study-flow .flow-step:hover{
+  transform:translateY(-1px);
+}
+.study-flow .flow-step.active:hover{
+  transform:none;
+}
+
+/* Sidebar ------------------------------------------------------------- */
+.sidebar .nav button,
+.sidebar .sidebar-footer-nav button{
+  min-height:44px!important;
+  border-radius:13px!important;
+}
+.sidebar .nav button:not(.active):hover,
+.sidebar .sidebar-footer-nav button:not(.active):hover{
+  transform:translateX(1px);
+}
+.sidebar .storage-chip{
+  border-radius:15px!important;
+}
+
+/* Home --------------------------------------------------------------- */
+.home-dashboard{
+  max-width:1440px;
+}
+.home-welcome{
+  padding:30px 32px!important;
+}
+.home-primary-actions{
+  gap:9px!important;
+}
+.metric-grid{
+  gap:14px!important;
+}
+.metric{
+  min-height:108px;
+}
+.home-needs,.home-recent{
+  border-radius:24px!important;
+}
+.needs-row.needs-action{
+  min-height:60px;
+}
+.needs-row.needs-action+.needs-row.needs-action{
+  border-top:1px solid #f0ecf2;
+}
+
+/* Study library ------------------------------------------------------- */
+.study-library-toolbar{
+  position:sticky;
+  top:82px;
+  z-index:12;
+  padding:10px!important;
+  border:1px solid rgba(224,215,244,.9)!important;
+  border-radius:18px!important;
+  background:rgba(251,249,252,.94)!important;
+  backdrop-filter:blur(12px);
+  box-shadow:0 6px 18px rgba(36,26,65,.045);
+}
+.study-library-search{
+  min-width:240px;
+}
+.study-grid{
+  gap:16px!important;
+}
+.study-card{
+  overflow:hidden;
+}
+.study-card-top{
+  min-height:46px;
+}
+.study-open{
+  padding-top:10px!important;
+}
+.study-open h3{
+  margin:5px 0 6px!important;
+  line-height:1.22!important;
+}
+.study-kind{
+  letter-spacing:.035em;
+}
+.study-progress{
+  margin-top:3px!important;
+}
+.study-progress-track{
+  height:7px!important;
+}
+.study-next-action{
+  margin-top:12px!important;
+}
+.study-next-action:hover .study-next-button{
+  transform:translateX(1px);
+}
+
+/* Builder ------------------------------------------------------------- */
+.outline-rail{
+  scrollbar-gutter:stable;
+}
+.outline-header{
+  padding-bottom:12px!important;
+}
+.outline-page{
+  border-radius:17px!important;
+}
+.outline-page-title{
+  line-height:1.3!important;
+}
+.outline-quality{
+  margin-top:12px!important;
+  border-radius:17px!important;
+}
+.page-canvas-heading{
+  margin-bottom:15px!important;
+}
+.page-heading-actions{
+  gap:7px!important;
+}
+.block-card{
+  margin-bottom:14px!important;
+}
+.block-card.selected{
+  box-shadow:0 8px 22px rgba(124,92,208,.08)!important;
+}
+.block-card .block-title{
+  line-height:1.25!important;
+}
+.block-actions,
+.block-card-header-actions{
+  gap:5px!important;
+}
+.rich-editor-shell{
+  overflow:hidden;
+}
+.rich-editor-toolbar{
+  min-height:42px;
+  gap:4px!important;
+}
+.insert-step-between{
+  opacity:.62;
+  transition:opacity .14s ease,color .14s ease,background-color .14s ease;
+}
+.block-card:hover .insert-step-between,
+.insert-step-between:focus-visible{
+  opacity:1;
+}
+.section-settings-drawer{
+  box-shadow:-18px 0 42px rgba(36,26,65,.12)!important;
+}
+.section-settings-head{
+  position:sticky;
+  top:0;
+  z-index:3;
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(10px);
+}
+
+/* Settings ------------------------------------------------------------ */
+.settings-grid,
+.global-settings-grid{
+  gap:16px!important;
+  align-items:start;
+}
+.settings-card{
+  padding:23px!important;
+}
+.settings-card-icon{
+  width:42px!important;
+  height:42px!important;
+  border-radius:14px!important;
+}
+.global-email-heading{
+  gap:16px!important;
+}
+.email-template-group,
+.email-test-panel,
+.email-advanced-settings{
+  padding:18px!important;
+}
+.email-template-group+.email-template-group{
+  margin-top:12px;
+}
+.integration-health{
+  gap:10px!important;
+}
+
+/* Send --------------------------------------------------------------- */
+.send-page,
+.view-send .content{
+  max-width:1320px;
+}
+.send-hero{
+  padding:28px 30px!important;
+}
+.send-status{
+  border-radius:18px!important;
+}
+.launch-readiness{
+  padding:22px!important;
+}
+.launch-readiness-head{
+  gap:18px!important;
+}
+.launch-readiness-score{
+  min-width:48px;
+  height:48px;
+  display:grid;
+  place-items:center;
+  border-radius:16px!important;
+  background:#f3eff6!important;
+  color:var(--eve-plum-800)!important;
+  font-size:13px!important;
+  font-weight:850!important;
+}
+.launch-readiness-grid{
+  gap:9px!important;
+}
+.launch-check{
+  min-height:72px;
+  padding:12px 13px!important;
+  border-radius:16px!important;
+  text-align:left;
+  transition:border-color .14s ease,background-color .14s ease,transform .12s ease,box-shadow .14s ease;
+}
+.launch-check:hover{
+  transform:translateY(-1px);
+  box-shadow:0 6px 16px rgba(36,26,65,.055);
+}
+.launch-check.ready{
+  background:#fcfdf9!important;
+}
+.launch-check.attention,
+.launch-check.needs{
+  background:#fffafb!important;
+}
+.launch-check-mark{
+  flex:none;
+}
+.send-segment-card{
+  border-radius:21px!important;
+  overflow:hidden;
+}
+.send-segment-card-head{
+  min-height:66px;
+}
+.send-segment-card-body{
+  border-top:1px solid #eee8f1;
+}
+.send-segment-setting-panel{
+  border-radius:17px!important;
+}
+.send-link-box,
+.send-share-card{
+  border-radius:18px!important;
+}
+
+/* Review + Insight workflow ------------------------------------------ */
+.review-page,
+.view-review .content{
+  max-width:1440px;
+}
+.review-tabs{
+  scrollbar-gutter:stable;
+}
+.review-tab{
+  padding-inline:13px!important;
+}
+.review-evidence-tray{
+  padding:20px 22px!important;
+  border-radius:22px!important;
+}
+.review-evidence-head{
+  gap:18px!important;
+}
+.review-evidence-actions{
+  gap:8px!important;
+  flex-wrap:wrap;
+}
+.review-evidence-list{
+  gap:7px!important;
+}
+.review-evidence-list>button{
+  min-height:62px;
+  border-radius:15px!important;
+  transition:background-color .14s ease,border-color .14s ease,transform .12s ease;
+}
+.review-evidence-list>button:hover{
+  background:#f8f5fa!important;
+  transform:translateY(-1px);
+}
+.review-overview-grid{
+  gap:12px!important;
+}
+.review-overview-card{
+  min-height:92px;
+}
+.review-quote{
+  padding:18px 19px!important;
+  border-radius:18px!important;
+}
+.review-quote p{
+  line-height:1.62!important;
+}
+.review-workspace{
+  min-width:0;
+}
+
+/* Tables -------------------------------------------------------------- */
+.table-wrap,
+.review-table-wrap{
+  border:1px solid #e8e2ec;
+  border-radius:18px;
+  overflow:auto;
+  background:#fff;
+}
+table{
+  border-collapse:separate!important;
+  border-spacing:0!important;
+}
+table th{
+  position:sticky;
+  top:0;
+  z-index:2;
+  background:#faf8fb!important;
+  color:var(--eve-secondary)!important;
+  font-size:10px!important;
+  letter-spacing:.055em;
+  text-transform:uppercase;
+}
+table th,table td{
+  padding:12px 14px!important;
+  border-bottom:1px solid #eeeaf1!important;
+  vertical-align:top;
+}
+table tbody tr:last-child td{border-bottom:0!important}
+table tbody tr:hover td{
+  background:#fcfbfd;
+}
+
+/* Insight bank -------------------------------------------------------- */
+.repository-tools{
+  padding:14px!important;
+}
+.repository-search-row{
+  gap:9px!important;
+}
+.repository-search{
+  min-width:260px;
+}
+.finding-grid,.insight-bank-grid{
+  gap:15px!important;
+}
+.insight-bank-card{
+  padding:21px!important;
+}
+.finding-evidence{
+  border-radius:14px!important;
+  line-height:1.55!important;
+}
+.finding-actions{
+  padding-top:12px!important;
+}
+
+/* Archive + templates ------------------------------------------------ */
+.archive-study-card{
+  padding:20px!important;
+}
+.archive-study-card .toolbar{
+  justify-content:flex-end;
+}
+.template-grid{
+  gap:16px!important;
+}
+.template-card{
+  padding:22px!important;
+}
+.template-card .btn{
+  margin-top:auto;
+}
+
+/* Modals / overlays --------------------------------------------------- */
+.modal{
+  background:rgba(32,24,48,.38)!important;
+  backdrop-filter:blur(5px);
+  padding:24px!important;
+}
+.modal-card{
+  width:min(720px,100%)!important;
+  max-height:min(86vh,900px)!important;
+  overflow:auto;
+  border:1px solid rgba(224,215,244,.9)!important;
+  border-radius:26px!important;
+  box-shadow:0 28px 80px rgba(29,20,48,.22)!important;
+}
+.modal-card>.modal-head,
+.modal-card>.modal-header{
+  position:sticky;
+  top:0;
+  z-index:5;
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(12px);
+}
+.modal-close-icon,
+.settings-close{
+  flex:none;
+}
+.modal .field:last-child{margin-bottom:0}
+
+/* Toast --------------------------------------------------------------- */
+.toast{
+  max-width:min(520px,calc(100vw - 32px))!important;
+  min-height:48px;
+  padding:12px 15px!important;
+  border-radius:16px!important;
+  box-shadow:0 14px 36px rgba(36,26,65,.16)!important;
+  line-height:1.45;
+}
+
+/* Empty + loading states --------------------------------------------- */
+.empty-state,
+.empty,
+.compact-empty{
+  text-align:center;
+}
+.empty-state{
+  padding:36px 26px!important;
+}
+.empty-state h3{
+  text-wrap:balance;
+}
+.empty-state p{
+  line-height:1.55!important;
+}
+.empty-state .btn{
+  margin-top:6px;
+}
+
+/* Participant experience -------------------------------------------- */
+.participant-shell{
+  background:linear-gradient(180deg,#f8f6fb 0,#f4f1f7 100%)!important;
+}
+.participant-top{
+  min-height:72px!important;
+}
+.participant-runtime{
+  padding-top:26px!important;
+  padding-bottom:64px!important;
+}
+.participant-card{
+  border:1px solid rgba(224,215,244,.88)!important;
+  box-shadow:0 12px 34px rgba(36,26,65,.075)!important;
+}
+.participant-study-title{
+  margin-bottom:26px!important;
+}
+.participant-study-title h1{
+  line-height:1.08!important;
+  text-wrap:balance;
+}
+.participant-page-heading{
+  margin-bottom:20px!important;
+}
+.participant-page-heading h2{
+  line-height:1.15!important;
+  text-wrap:balance;
+}
+.participant-section{
+  margin-bottom:22px!important;
+}
+.participant-section+.participant-section{
+  padding-top:4px;
+}
+.participant-question{
+  line-height:1.35!important;
+}
+.choice{
+  min-height:48px!important;
+  border-radius:15px!important;
+  transition:border-color .14s ease,background-color .14s ease,box-shadow .14s ease;
+}
+.choice:hover{
+  border-color:#cfc3dd!important;
+  background:#fdfcfe!important;
+}
+.choice:has(input:checked){
+  border-color:var(--eve-plum-400)!important;
+  box-shadow:0 0 0 2px rgba(124,92,208,.08)!important;
+}
+.participant-page-nav{
+  margin-top:28px!important;
+  padding-top:18px!important;
+  border-top:1px solid #eee9f1;
+}
+.participant-privacy{
+  line-height:1.45!important;
+}
+.participant-session-status{
+  margin-bottom:16px!important;
+}
+
+/* Scrollbars ---------------------------------------------------------- */
+@supports selector(::-webkit-scrollbar){
+  .outline-rail::-webkit-scrollbar,
+  .canvas::-webkit-scrollbar,
+  .review-tabs::-webkit-scrollbar,
+  .table-wrap::-webkit-scrollbar,
+  .modal-card::-webkit-scrollbar{
+    width:10px;
+    height:10px;
+  }
+  .outline-rail::-webkit-scrollbar-thumb,
+  .canvas::-webkit-scrollbar-thumb,
+  .review-tabs::-webkit-scrollbar-thumb,
+  .table-wrap::-webkit-scrollbar-thumb,
+  .modal-card::-webkit-scrollbar-thumb{
+    background:#d8d0df;
+    border:3px solid transparent;
+    background-clip:padding-box;
+    border-radius:999px;
+  }
+}
+
+/* Responsive ---------------------------------------------------------- */
+@media(max-width:1100px){
+  .launch-readiness-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .review-evidence-head{align-items:flex-start!important;flex-direction:column}
+  .review-evidence-actions{width:100%}
+  .global-email-heading{align-items:flex-start!important;flex-direction:column}
+}
+@media(max-width:900px){
+  .content{padding-inline:18px!important}
+  .study-library-toolbar{top:72px}
+  .settings-card{padding:20px!important}
+  .launch-readiness{padding:18px!important}
+  .launch-readiness-grid{grid-template-columns:1fr!important}
+  .send-segment-settings-grid{grid-template-columns:1fr!important}
+  .review-evidence-actions .btn{flex:1}
+  .archive-study-card{align-items:flex-start!important;flex-direction:column}
+  .archive-study-card .toolbar{width:100%;justify-content:flex-start}
+}
+@media(max-width:760px){
+  :root{--eve-control-h:43px}
+  .content{padding-inline:14px!important}
+  .topbar{
+    min-height:68px!important;
+    padding-inline:12px!important;
+  }
+  .topbar .toolbar{gap:6px!important}
+  .topbar-context{
+    max-width:100%!important;
+  }
+  .topbar-context .topbar-study{
+    max-width:42vw!important;
+  }
+  .study-flow{
+    padding-inline:10px!important;
+    overflow-x:auto;
+    justify-content:flex-start!important;
+    scrollbar-width:none;
+  }
+  .study-flow::-webkit-scrollbar{display:none}
+  .study-flow .flow-step{
+    flex:none;
+  }
+  .home-welcome,.send-hero{
+    padding:22px 20px!important;
+  }
+  .hero h2,.home-welcome h2,.send-hero h2{
+    font-size:30px!important;
+  }
+  .metric-grid{gap:10px!important}
+  .study-library-toolbar{
+    position:relative;
+    top:auto;
+  }
+  .study-library-search{min-width:0;width:100%}
+  .study-filter-segments{padding-bottom:2px}
+  .study-next-action{
+    grid-template-columns:minmax(0,1fr) 38px!important;
+  }
+  .page-heading-actions .btn{
+    flex:none!important;
+  }
+  .launch-readiness-head{
+    align-items:flex-start!important;
+  }
+  .launch-readiness-score{
+    min-width:44px;height:44px;
+  }
+  .review-tabs{
+    padding:5px!important;
+  }
+  .review-evidence-tray{
+    padding:17px!important;
+  }
+  .review-evidence-actions{
+    display:grid!important;
+    grid-template-columns:1fr;
+  }
+  .review-evidence-actions .btn{width:100%}
+  .repository-search-row{
+    align-items:stretch!important;
+    flex-direction:column;
+  }
+  .repository-search{min-width:0;width:100%}
+  .modal{
+    align-items:flex-end!important;
+    padding:10px!important;
+  }
+  .modal-card{
+    width:100%!important;
+    max-height:92vh!important;
+    border-radius:24px 24px 18px 18px!important;
+  }
+  .participant-runtime{
+    padding:14px 12px 44px!important;
+  }
+  .participant-card{
+    border-radius:24px!important;
+    padding:25px 20px!important;
+  }
+  .participant-page-nav{
+    display:grid!important;
+    grid-template-columns:1fr 1fr;
+    gap:8px!important;
+  }
+  .participant-page-count{
+    grid-column:1 / -1;
+    grid-row:1;
+    justify-self:center;
+  }
+  .participant-page-nav>.btn{
+    width:100%;
+  }
+  .toast{
+    left:16px!important;
+    right:16px!important;
+    bottom:16px!important;
+    width:auto!important;
+  }
+}
+@media(max-width:480px){
+  .metric-grid{grid-template-columns:1fr!important}
+  .hero h2,.home-welcome h2,.send-hero h2{
+    font-size:27px!important;
+  }
+  .btn{
+    padding-inline:13px!important;
+  }
+  .study-card-actions{gap:3px!important}
+  .topbar-context .topbar-study{max-width:34vw!important}
+}
+
+/* Motion -------------------------------------------------------------- */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+    scroll-behavior:auto!important;
+  }
+}
+
+
+/* v56.6 · Typography clarity + editable-text affordance ----------------
+   Eve uses one system sans-serif family throughout. Hierarchy comes from
+   weight, size and spacing rather than a decorative display face. */
+
+html,
+body,
+button,
+input,
+textarea,
+select{
+  font-family:var(--eve-font-body)!important;
+}
+
+h1,h2,h3,h4,h5,h6,
+.brand,
+.hero h2,
+.home-welcome h2,
+.send-hero h2,
+.participant-study-title h1,
+.participant-page-heading h2,
+.modal-card h2,
+.modal-card h3{
+  font-family:var(--eve-font-body)!important;
+  font-style:normal!important;
+  font-variant:normal!important;
+  letter-spacing:-.015em!important;
+}
+
+h1,
+.hero h2,
+.home-welcome h2,
+.send-hero h2,
+.participant-study-title h1{
+  font-weight:750!important;
+}
+
+h2,
+.participant-page-heading h2{
+  font-weight:720!important;
+}
+
+h3,h4,h5,h6{
+  font-weight:700!important;
+}
+
+body,
+.input,
+.textarea,
+.select,
+.rich-editor,
+.rich-display,
+.participant-copy,
+.participant-question,
+.muted{
+  letter-spacing:0!important;
+}
+
+/* Inline editable titles should read like text, while still signalling that
+   they can be changed. The pencil is deliberately quiet until interaction. */
+.inline-title{
+  font-family:var(--eve-font-body)!important;
+  font-weight:700!important;
+  font-style:normal!important;
+  letter-spacing:-.012em!important;
+  color:var(--eve-ink)!important;
+  border:0!important;
+  border-bottom:1px dotted rgba(101,68,180,.28)!important;
+  border-radius:0!important;
+  background-color:transparent!important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23938aa2' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20h9'/%3E%3Cpath d='M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z'/%3E%3C/svg%3E")!important;
+  background-repeat:no-repeat!important;
+  background-position:right 4px center!important;
+  background-size:14px 14px!important;
+  padding-right:25px!important;
+  transition:border-color .14s ease,background-color .14s ease,box-shadow .14s ease!important;
+}
+
+.inline-title:hover{
+  border-bottom-color:rgba(101,68,180,.58)!important;
+  background-color:rgba(124,92,208,.035)!important;
+}
+
+.inline-title:focus{
+  outline:none!important;
+  border-bottom-style:solid!important;
+  border-bottom-color:var(--eve-plum-500)!important;
+  background-color:rgba(124,92,208,.05)!important;
+  box-shadow:0 3px 0 -2px rgba(124,92,208,.16)!important;
+}
+
+.study-title{
+  font-family:var(--eve-font-body)!important;
+  font-weight:760!important;
+  letter-spacing:-.025em!important;
+}
+
+.page-title-input{
+  font-family:var(--eve-font-body)!important;
+  font-weight:720!important;
+  letter-spacing:-.018em!important;
+}
+
+/* Rich-text editing already has a toolbar, but keep its editable surface
+   visually distinct from rendered participant/static copy. */
+.rich-editor-shell{
+  border-color:#ddd6e4!important;
+}
+
+.rich-editor-shell:hover{
+  border-color:#cfc3dc!important;
+}
+
+.rich-editor-shell:focus-within{
+  border-color:var(--eve-plum-400)!important;
+  box-shadow:0 0 0 3px rgba(124,92,208,.08)!important;
+}
+
+.rich-editor-toolbar::after{
+  content:"Editable";
+  margin-left:auto;
+  padding-right:4px;
+  color:#968da2;
+  font-size:9px;
+  font-weight:750;
+  letter-spacing:.045em;
+  text-transform:uppercase;
+  pointer-events:none;
+}
+
+.rich-editor{
+  font-family:var(--eve-font-body)!important;
+  font-weight:400!important;
+}
+
+/* Other inline builder inputs embedded inside editable rows retain a small
+   visual boundary even where older Builder styling made their border vanish. */
+.view-builder .list-item .input,
+.view-builder .mini-card.editable input,
+.view-builder .sort-group-input{
+  border:1px solid #e3dce8!important;
+}
+
+.view-builder .list-item .input:hover,
+.view-builder .mini-card.editable input:hover,
+.view-builder .sort-group-input:hover{
+  border-color:#cfc3dc!important;
+}
+
+.section-drag-overview .inline-title{
+  background-image:none!important;
+  border-bottom-color:transparent!important;
+}
+
+@media(max-width:760px){
+  .inline-title{
+    background-size:13px 13px!important;
+    padding-right:22px!important;
+  }
+  .rich-editor-toolbar::after{
+    content:"Edit";
+  }
+}

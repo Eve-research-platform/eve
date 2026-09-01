@@ -1,0 +1,20 @@
+name = "eve-relay"
+main = "src/worker.mjs"
+compatibility_date = "2026-08-01"
+
+[[r2_buckets]]
+binding = "EVE_RELAY"
+bucket_name = "eve-relay"
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+[vars]
+EVE_MAX_RESPONSES_PER_STUDY = "10000"
+EVE_MAX_RECORDINGS_PER_STUDY = "5000"
+EVE_MAX_RECORDING_REQUEST_BYTES = "60000000"
+EVE_RECORDING_RELAY_GRACE_HOURS = "48"
+
+[triggers]
+crons = [ "0 * * * *" ]

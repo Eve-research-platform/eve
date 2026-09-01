@@ -1,0 +1,24 @@
+'use strict';
+const assert=require('assert');
+const rawKey=Buffer.alloc(32,9).toString('base64');
+global.encoder=new TextEncoder();global.decoder=new TextDecoder();
+global.bytesToB64Url=bytes=>Buffer.from(bytes).toString('base64url');global.b64UrlToBytes=raw=>new Uint8Array(Buffer.from(String(raw||''),'base64url'));
+global.localKeyRaw=()=>rawKey;
+global.encrypt=async data=>{const key=await crypto.subtle.importKey('raw',Buffer.from(rawKey,'base64'),{name:'AES-GCM'},false,['encrypt']);const iv=crypto.getRandomValues(new Uint8Array(12)),cipher=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,new TextEncoder().encode(JSON.stringify(data)));return{v:1,iv:[...iv],data:[...new Uint8Array(cipher)]}};
+async function decrypt(env){const key=await crypto.subtle.importKey('raw',Buffer.from(rawKey,'base64'),{name:'AES-GCM'},false,['decrypt']),plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:new Uint8Array(env.iv)},key,new Uint8Array(env.data));return JSON.parse(new TextDecoder().decode(plain))}
+const study={id:'s1',slug:'study-one',title:'Study',updatedAt:10,version:1,status:'live',relayPublished:true,relayAdminToken:'admin',relayKey:'study-key',settings:{storageProvider:'organisation'},publishedVersions:{'1':{version:1}}};
+const rec={recordingId:'rec-1',storage:'relay',mimeType:'audio/webm',size:4};
+const response={id:'r1',studyId:'s1',studyVersion:1,submittedAt:20,answers:{b1:{value:rec}}};
+global.state={view:'home',workspaceRevision:1,setup:{relayMode:'cloudflare'},studies:[study],responses:[response],findings:[],participantSegments:[],storage:{provider:'Google Drive',location:'My Drive / Eve',connected:true,cloudSyncState:'idle',cloudSyncError:'',connectors:{google:{capability:'cap',connection:{connected:true,location:{rootFolderId:'root',displayName:'My Drive / Eve'}}},microsoft:null}}};
+global.workspacePayload=()=>({view:'home',workspaceRevision:1,studies:JSON.parse(JSON.stringify(state.studies)),findings:[],participantSegments:[],globalSettings:{},storage:JSON.parse(JSON.stringify(state.storage))});
+global.RECORDING_PREFIX='eve-recording:';global.RESPONSE_PREFIX='eve-response:';
+const cloud=new Map(),idb=new Map(),localSaved=[];let retentionPosts=0;
+global.idbGet=async key=>idb.get(key)||null;global.idbSet=async(key,value)=>{idb.set(key,value);return true};
+global.saveLocalRecording=async(id,blob)=>{localSaved.push({id,size:blob.size});idb.set(RECORDING_PREFIX+id,JSON.stringify({v:1,iv:'x',data:'y',mimeType:blob.type,size:blob.size}));return{recordingId:id,storage:'local'}};
+global.relayVersionKey=()=> 'study-key';global.decryptRecordingBlobWithKey=async()=>new Blob([Buffer.from('data')],{type:'audio/webm'});
+global.persistWorkspace=async()=>true;global.render=()=>{};global.toast=()=>{};global.relativeDate=()=>'';global.esc=v=>String(v??'');
+global.EveSetup={ownerHeaders:(_state,extra={})=>({'X-Eve-Owner':'owner',...extra})};
+global.EveDeployment={isOrganisationCloud:()=>false,isGoogleWorkspace:()=>false,relayFetch:async(url,options={})=>{if(options.method==='POST'){retentionPosts++;return new Response(JSON.stringify({ok:true,retention:{status:'scheduled',purgeAfter:Date.now()+172800000}}),{status:200,headers:{'content-type':'application/json'}})}return new Response(JSON.stringify({envelope:{v:1,mimeType:'audio/webm',size:4,data:'cipher'}}),{status:200,headers:{'content-type':'application/json'}})}};
+global.eveFetch=async(url,options={})=>{const u=new URL(String(url),'http://eve.local');if(u.pathname==='/api/connectors/files'&&options.method==='PUT'){const d=JSON.parse(options.body);cloud.set(d.path,d.content);return new Response(JSON.stringify({ok:true}),{status:200,headers:{'content-type':'application/json'}})}if(u.pathname==='/api/connectors/files'&&!options.method){const path=u.searchParams.get('path');if(!cloud.has(path))return new Response(JSON.stringify({reason:'not found'}),{status:404,headers:{'content-type':'application/json'}});return new Response(JSON.stringify({content:cloud.get(path)}),{status:200,headers:{'content-type':'application/json'}})}throw new Error(`Unexpected API ${u.pathname} ${options.method||'GET'}`)};
+delete require.cache[require.resolve('../app/cloud-storage.js')];require('../app/cloud-storage.js');
+(async()=>{const ok=await global.EveCloud.syncProvider('google');assert.equal(ok,true);assert.equal(retentionPosts,1);assert.equal(rec.storage,'local');assert.equal(rec.durableProvider,'google');assert.equal(rec.durablePath,'Studies/s1/recordings/rec-1.eve.json');assert(rec.relayPurgeAfter>Date.now());assert.equal(localSaved.length,1);assert(cloud.has(rec.durablePath));const responseDoc=JSON.parse(cloud.get('Studies/s1/responses/r1.eve.json')),saved=await decrypt(responseDoc.envelope);assert.equal(saved.answers.b1.value.storage,'local');assert.equal(saved.answers.b1.value.durablePath,rec.durablePath);console.log('v62.5 durable recording handoff passed')})().catch(err=>{console.error(err);process.exit(1)});

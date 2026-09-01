@@ -1,0 +1,114 @@
+/* Eve study presentation themes · v57.1
+   Participant/Preview surfaces only. Researcher workspace styling is unchanged. */
+
+/* Theme picker */
+.study-theme-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.study-theme-choice{position:relative;display:grid;grid-template-columns:112px minmax(0,1fr) 24px;align-items:center;gap:14px;min-height:112px;padding:13px;border:1px solid var(--eve-border);border-radius:18px;background:#fff;cursor:pointer;transition:border-color .14s ease,box-shadow .14s ease,background .14s ease}
+.study-theme-choice:hover{border-color:var(--eve-plum-300)}
+.study-theme-choice.selected{border-color:var(--eve-plum-500);background:#fcfaff;box-shadow:0 0 0 2px rgba(124,92,208,.08)}
+.study-theme-choice>input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.study-theme-choice:focus-within{outline:3px solid rgba(124,92,208,.13);outline-offset:2px}
+.study-theme-choice-copy{display:grid;gap:5px;min-width:0}
+.study-theme-choice-copy b{font-size:14px;color:var(--eve-ink)}
+.study-theme-choice-copy small{font-size:12px;line-height:1.45;color:var(--eve-secondary)}
+.study-theme-selected{width:23px;height:23px;display:grid;place-items:center;border-radius:999px;background:var(--eve-plum-500);color:#fff;font-size:12px;font-weight:800}
+.study-theme-choice:not(.selected) .study-theme-selected{background:transparent}
+.study-theme-preview{position:relative;height:78px;overflow:hidden;border:1px solid #e4ddea;background:#f8f6fb;border-radius:12px}
+.study-theme-preview i{display:block;height:16px;background:#f4f0f8;border-bottom:1px solid #e4ddea}
+.study-theme-preview strong{display:block;margin:13px 11px 8px;font-size:9px;line-height:1;color:#2b2333}
+.study-theme-preview span{display:block;width:65%;height:5px;margin:0 11px 6px;border-radius:999px;background:#d8cfe2}
+.study-theme-preview em{display:block;width:42px;height:13px;margin:10px 11px;border-radius:999px;background:#7c5cd0}
+.study-theme-preview-gds{border-color:#b1b4b6;border-radius:0;background:#fff}
+.study-theme-preview-gds i{height:17px;background:#0b0c0c;border:0}
+.study-theme-preview-gds strong{margin-top:12px;font-family:Arial,sans-serif;font-size:9px;font-weight:700;color:#0b0c0c}
+.study-theme-preview-gds span{height:4px;border-radius:0;background:#b1b4b6}
+.study-theme-preview-gds em{width:44px;height:14px;border-radius:0;background:#00703c;box-shadow:0 2px 0 #002d18}
+.study-theme-note{margin-top:14px!important}
+@media(max-width:760px){.study-theme-grid{grid-template-columns:1fr}.study-theme-choice{grid-template-columns:96px minmax(0,1fr) 24px}}
+
+/* GDS theme: GOV.UK Design System visual conventions without GOV.UK branding
+   or proprietary GDS Transport font assets. */
+.study-theme-gds{
+  --gds-black:#0b0c0c;--gds-dark-grey:#505a5f;--gds-mid-grey:#b1b4b6;--gds-light-grey:#f3f2f1;
+  --gds-blue:#1d70b8;--gds-green:#00703c;--gds-green-dark:#005a30;--gds-red:#d4351c;--gds-yellow:#ffdd00;
+  min-height:100vh;padding-bottom:0!important;background:#fff!important;color:var(--gds-black)!important;font-family:Arial,Helvetica,sans-serif!important
+}
+.study-theme-gds *,.study-theme-gds *::before,.study-theme-gds *::after{font-family:Arial,Helvetica,sans-serif!important}
+.study-theme-gds .participant-top{position:sticky;top:0;z-index:4;box-sizing:border-box;width:100%;max-width:none!important;min-height:64px!important;height:auto!important;margin:0!important;padding:12px max(24px,calc((100% - 960px)/2))!important;background:var(--gds-black)!important;border:0!important;border-bottom:10px solid var(--gds-blue)!important;backdrop-filter:none!important}
+.study-theme-gds .participant-brand{color:#fff!important;font-size:24px!important;line-height:1!important;font-weight:700!important;letter-spacing:-.02em!important}
+.study-theme-gds .participant-brand .brand-mark{display:none!important}
+.study-theme-gds .participant-brand::after{content:" · Research study";font-size:17px;font-weight:400;letter-spacing:0}
+.study-theme-gds .privacy-badge{padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;color:#fff!important;font-size:13px!important;font-weight:400!important}
+.study-theme-gds .participant-runtime{box-sizing:border-box;width:100%;max-width:960px!important;margin:0 auto!important;padding:38px 24px 72px!important}
+.study-theme-gds .participant-card,.study-theme-gds .participant-runtime>form,.study-theme-gds .participant-runtime>.completion{width:min(100%,660px);margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important}
+.study-theme-gds .participant-study-title{margin:0 0 34px!important}
+.study-theme-gds .participant-study-title .eyebrow{margin-bottom:8px;color:var(--gds-dark-grey)!important;font-size:16px!important;font-weight:700!important;letter-spacing:0!important}
+.study-theme-gds .participant-study-title h1,.study-theme-gds .completion h1{margin:0!important;color:var(--gds-black)!important;font-size:48px!important;line-height:1.05!important;font-weight:700!important;letter-spacing:-.02em!important}
+.study-theme-gds .participant-page-heading{margin:0 0 30px!important}
+.study-theme-gds .participant-page-heading>span{display:block;margin-bottom:7px;color:var(--gds-dark-grey)!important;font-size:16px!important;font-weight:400!important}
+.study-theme-gds .participant-page-heading h2{margin:0!important;color:var(--gds-black)!important;font-size:32px!important;line-height:1.12!important;font-weight:700!important;letter-spacing:-.01em!important}
+.study-theme-gds .participant-section{margin:0 0 36px!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:var(--gds-black)!important}
+.study-theme-gds .participant-section h2,.study-theme-gds .participant-section h3,.study-theme-gds .participant-question{color:var(--gds-black)!important;font-weight:700!important}
+.study-theme-gds .participant-section h2{font-size:27px!important;line-height:1.15!important}
+.study-theme-gds .participant-section h3,.study-theme-gds .participant-question{font-size:19px!important;line-height:1.3!important}
+.study-theme-gds .participant-copy,.study-theme-gds .rich-display,.study-theme-gds .participant-privacy,.study-theme-gds .field-hint,.study-theme-gds .muted{color:var(--gds-black)!important;font-size:19px!important;line-height:1.5!important}
+.study-theme-gds .field label,.study-theme-gds .field>span{color:var(--gds-black)!important;font-size:19px!important;font-weight:700!important}
+.study-theme-gds .required{color:var(--gds-red)!important}
+
+/* Inputs */
+.study-theme-gds .input,.study-theme-gds .textarea,.study-theme-gds .select,.study-theme-gds .sort-group-input{min-height:44px!important;border:2px solid var(--gds-black)!important;border-radius:0!important;background:#fff!important;color:var(--gds-black)!important;box-shadow:none!important;font-size:19px!important;line-height:1.25!important}
+.study-theme-gds .textarea{padding:8px!important}
+.study-theme-gds .input:focus,.study-theme-gds .textarea:focus,.study-theme-gds .select:focus,.study-theme-gds .sort-group-input:focus{outline:3px solid var(--gds-yellow)!important;outline-offset:0!important;border-color:var(--gds-black)!important;box-shadow:inset 0 0 0 2px var(--gds-black)!important}
+
+/* Buttons */
+.study-theme-gds .btn{min-height:40px!important;padding:8px 12px 7px!important;border:0!important;border-radius:0!important;background:var(--gds-light-grey)!important;color:var(--gds-black)!important;box-shadow:0 2px 0 #929191!important;font-size:19px!important;line-height:1.2!important;font-weight:400!important;text-decoration:none!important}
+.study-theme-gds .btn:hover:not(:disabled){background:#dbdad9!important;transform:none!important}
+.study-theme-gds .btn.primary{background:var(--gds-green)!important;color:#fff!important;box-shadow:0 2px 0 #002d18!important;font-weight:700!important}
+.study-theme-gds .btn.primary:hover:not(:disabled){background:var(--gds-green-dark)!important}
+.study-theme-gds .btn:focus-visible,.study-theme-gds button:focus-visible,.study-theme-gds a:focus-visible{outline:3px solid var(--gds-yellow)!important;outline-offset:0!important;background:var(--gds-yellow)!important;color:var(--gds-black)!important;box-shadow:0 2px 0 var(--gds-black)!important}
+.study-theme-gds a{color:var(--gds-blue)!important;text-decoration:underline!important;text-decoration-thickness:max(1px,.0625rem)!important;text-underline-offset:.1578em!important}
+
+/* Choices */
+.study-theme-gds .choice,.study-theme-gds .tree-choice{position:relative;display:flex!important;align-items:flex-start;gap:12px;min-height:40px!important;margin:0 0 10px!important;padding:4px 0!important;border:0!important;border-radius:0!important;background:transparent!important;color:var(--gds-black)!important;box-shadow:none!important;font-size:19px!important;line-height:1.35!important}
+.study-theme-gds .choice:hover,.study-theme-gds .tree-choice:hover,.study-theme-gds .choice:has(input:checked),.study-theme-gds .tree-choice:has(input:checked){border:0!important;background:transparent!important;box-shadow:none!important}
+.study-theme-gds .choice input[type="radio"],.study-theme-gds .choice input[type="checkbox"],.study-theme-gds .tree-choice input[type="radio"],.study-theme-gds .tree-choice input[type="checkbox"]{flex:0 0 auto;width:34px!important;height:34px!important;margin:-1px 0 0!important;accent-color:var(--gds-black)!important}
+.study-theme-gds .choice input:focus-visible,.study-theme-gds .tree-choice input:focus-visible{outline:4px solid var(--gds-yellow)!important;outline-offset:1px!important}
+
+/* Progress / saved state */
+.study-theme-gds .participant-session-status{width:min(100%,660px);margin:0 0 26px!important;padding:12px 14px!important;border:0!important;border-left:5px solid var(--gds-blue)!important;border-radius:0!important;background:var(--gds-light-grey)!important;color:var(--gds-black)!important}
+.study-theme-gds .participant-session-status b,.study-theme-gds .participant-session-status small{color:var(--gds-black)!important}
+.study-theme-gds .participant-progress-meta{width:min(100%,660px);margin-bottom:7px!important;color:var(--gds-dark-grey)!important;font-size:16px!important}
+.study-theme-gds .participant-progress{width:min(100%,660px);height:6px!important;margin:0 0 38px!important;border-radius:0!important;background:var(--gds-light-grey)!important}
+.study-theme-gds .participant-progress span{border-radius:0!important;background:var(--gds-blue)!important}
+
+/* Research method surfaces */
+.study-theme-gds .preference-options{gap:12px!important}
+.study-theme-gds .preference-card,.study-theme-gds .ranking-item,.study-theme-gds .sort-card,.study-theme-gds .sort-group,.study-theme-gds .matrix-row,.study-theme-gds .rating-scale-choice,.study-theme-gds .navigation-task-runtime,.study-theme-gds .recording-runtime,.study-theme-gds .panel-signup-runtime,.study-theme-gds .panel-signup-terms{border:2px solid var(--gds-mid-grey)!important;border-radius:0!important;background:#fff!important;color:var(--gds-black)!important;box-shadow:none!important}
+.study-theme-gds .preference-card:hover,.study-theme-gds .ranking-item:hover,.study-theme-gds .sort-card:hover{border-color:var(--gds-black)!important}
+.study-theme-gds .preference-card:has(input:checked),.study-theme-gds .rating-scale-choice.selected,.study-theme-gds .rating-scale-choice[aria-checked="true"]{border-color:var(--gds-black)!important;background:var(--gds-light-grey)!important;color:var(--gds-black)!important;box-shadow:inset 0 0 0 2px var(--gds-black)!important}
+.study-theme-gds .rating-scale-choice{color:var(--gds-black)!important}
+.study-theme-gds .sort-bank-shell,.study-theme-gds .highlighter-toolbar,.study-theme-gds .highlighter-task-head,.study-theme-gds .navigation-task-status,.study-theme-gds .recording-status,.study-theme-gds .screenout-note{border-radius:0!important;background:var(--gds-light-grey)!important;color:var(--gds-black)!important}
+.study-theme-gds .highlighter-stage,.study-theme-gds .navigation-recording-setup{border-radius:0!important}
+.study-theme-gds .panel-signup-runtime-head svg{color:var(--gds-blue)!important}
+
+/* Navigation / completion */
+.study-theme-gds .participant-page-nav{width:min(100%,660px);margin-top:42px!important;padding-top:24px!important;border-top:1px solid var(--gds-mid-grey)!important}
+.study-theme-gds .participant-page-count{color:var(--gds-dark-grey)!important;font-size:16px!important}
+.study-theme-gds .participant-privacy{width:min(100%,660px);margin-top:22px!important;color:var(--gds-dark-grey)!important;font-size:16px!important}
+.study-theme-gds .completion{color:var(--gds-black)!important}
+.study-theme-gds .completion-icon{width:48px!important;height:48px!important;border-radius:0!important;background:var(--gds-green)!important;color:#fff!important}
+.study-theme-gds .completion>.eyebrow{color:var(--gds-dark-grey)!important;font-size:16px!important;letter-spacing:0!important}
+.study-theme-gds .privacy-card{margin-top:28px!important;padding:16px!important;border:0!important;border-left:5px solid var(--gds-blue)!important;border-radius:0!important;background:var(--gds-light-grey)!important;color:var(--gds-black)!important}
+
+.preview-participant-shell.study-theme-gds{background:#fff!important}
+.preview-participant-shell.study-theme-gds .participant-runtime{max-width:960px!important}
+
+@media(max-width:640px){
+  .study-theme-gds .participant-top{min-height:58px!important;padding:10px 16px!important;border-bottom-width:8px!important}
+  .study-theme-gds .participant-brand{font-size:21px!important}.study-theme-gds .participant-brand::after{font-size:15px}.study-theme-gds .privacy-badge{font-size:11px!important}
+  .study-theme-gds .participant-runtime{padding:28px 16px 56px!important}
+  .study-theme-gds .participant-study-title h1,.study-theme-gds .completion h1{font-size:36px!important}
+  .study-theme-gds .participant-page-heading h2{font-size:27px!important}.study-theme-gds .participant-section h2{font-size:24px!important}
+  .study-theme-gds .participant-copy,.study-theme-gds .rich-display,.study-theme-gds .field label,.study-theme-gds .field>span,.study-theme-gds .input,.study-theme-gds .textarea,.study-theme-gds .select,.study-theme-gds .choice,.study-theme-gds .tree-choice,.study-theme-gds .btn{font-size:16px!important}
+  .study-theme-gds .participant-page-nav{grid-template-columns:1fr 1fr!important}
+}

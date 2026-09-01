@@ -1,0 +1,135 @@
+{
+  "version": "63.0.0",
+  "ratchets": {
+    "app/app.js": {
+      "maxBytes": 438432,
+      "maxLines": 1796,
+      "rule": "Hard ceiling. Deployment capability policy remains extracted."
+    },
+    "app/eve-transactions.js": {
+      "maxBytes": 4500,
+      "maxLines": 140,
+      "rule": "Generic transaction mechanics only."
+    },
+    "app/eve-archive-ops.js": {
+      "maxBytes": 9500,
+      "maxLines": 225,
+      "rule": "Archive mutation policy only. Archive rendering remains outside this operational module."
+    },
+    "app/eve-study-lifecycle.js": {
+      "maxBytes": 12300,
+      "maxLines": 250,
+      "rule": "Study live/off publication policy only. This is a hard ceiling; future lifecycle cleanup should shrink it."
+    },
+    "app/eve-participant-delivery.js": {
+      "maxBytes": 6200,
+      "maxLines": 150,
+      "rule": "Participant delivery/retry/pending mechanics only."
+    },
+    "app/eve-participant-submit.js": {
+      "maxBytes": 12200,
+      "maxLines": 55,
+      "rule": "Participant submission validation/serialization/orchestration only; rendering remains injected."
+    },
+    "app/eve-v56-polish.css": {
+      "maxBytes": 27000,
+      "maxLines": 1130,
+      "rule": "Final interaction/readability layer only. Keep typography and editable-state polish here rather than expanding app.js."
+    },
+    "server.js": {
+      "maxBytes": 21000,
+      "maxLines": 225,
+      "rule": "HTTP/static/relay composition only. Platform-service setup, buffering and state-store mechanics remain extracted."
+    },
+    "lib/live_security.js": {
+      "maxBytes": 7000,
+      "maxLines": 180,
+      "rule": "Production readiness, security headers, public abuse throttling and deployment safety only."
+    },
+    "app/eve-study-themes.js": {
+      "maxBytes": 3200,
+      "maxLines": 70,
+      "rule": "Theme registry, normalization and Study Settings theme-picker markup only."
+    },
+    "app/eve-study-themes.css": {
+      "maxBytes": 16000,
+      "maxLines": 140,
+      "rule": "Participant/Preview theme styling only. Do not theme the researcher workspace here."
+    },
+    "app/eve-setup.js": {
+      "maxBytes": 25500,
+      "maxLines": 410,
+      "rule": "Provider-neutral first-run state/checks only. Provider-specific full-cloud/Google presentation stays in deployment adapters."
+    },
+    "app/eve-setup.css": {
+      "maxBytes": 12000,
+      "maxLines": 190,
+      "rule": "First-run setup UI only."
+    },
+    "cloudflare-relay/src/worker.mjs": {
+      "maxBytes": 18000,
+      "maxLines": 300,
+      "rule": "Zero-access Cloudflare relay transport only; no research analysis or researcher workspace logic."
+    },
+    "app/eve-deployment.js": {
+      "maxBytes": 20500,
+      "maxLines": 235,
+      "rule": "Deployment/runtime adapter only: Apps Script compatibility plus full organisation-cloud setup/runtime seam."
+    },
+    "google-workspace/Code.gs": {
+      "maxBytes": 36000,
+      "maxLines": 600,
+      "rule": "Google Workspace server runtime, Sheet launcher, drive.file backend and indexed encrypted-response transport."
+    },
+    "google-workspace/Launcher.html": {
+      "maxBytes": 7000,
+      "maxLines": 120,
+      "rule": "Copied Google Sheet setup/deployment launcher only."
+    },
+    "app/eve-capabilities.js": {
+      "maxBytes": 11000,
+      "maxLines": 190,
+      "rule": "Deployment capability registry, notices and capability-aware health only."
+    },
+    "app/eve-capabilities.css": {
+      "maxBytes": 1800,
+      "maxLines": 40,
+      "rule": "Deployment capability presentation only."
+    },
+    "lib/runtime_config.js": {
+      "maxBytes": 3400,
+      "maxLines": 70,
+      "rule": "Expose only non-secret deployment/runtime facts to the browser."
+    },
+    "lib/relay_response_index.js": {
+      "maxBytes": 2600,
+      "maxLines": 80,
+      "rule": "File-backed relay response indexing only; no HTTP or study policy."
+    },
+    "app/cloud-storage.js": {
+      "maxBytes": 47000,
+      "maxLines": 525,
+      "rule": "Storage orchestration only; provider server logic stays in service modules."
+    },
+    "lib/organisation_storage.js": {
+      "maxBytes": 5000,
+      "maxLines": 120,
+      "rule": "Authenticated organisation-owned encrypted file store only; no research decryption."
+    },
+    "lib/state_store.js": {
+      "maxBytes": 8500,
+      "maxLines": 190,
+      "rule": "Postgres/file control-plane state abstraction, migration and advisory locking only."
+    },
+    "lib/platform_services.js": {
+      "maxBytes": 2500,
+      "maxLines": 70,
+      "rule": "Compose server-side platform services and persistence dependencies only."
+    },
+    "lib/http_buffer.js": {
+      "maxBytes": 2200,
+      "maxLines": 55,
+      "rule": "Commit-after-database response buffering only."
+    }
+  }
+}

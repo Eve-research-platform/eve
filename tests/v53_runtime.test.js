@@ -1,0 +1,10 @@
+'use strict';
+const assert=require('assert'),fs=require('fs'),path=require('path');
+const src=fs.readFileSync(path.join(__dirname,'..','app','eve-v53-runtime.js'),'utf8');
+assert(src.includes("code:'request_timeout'"));
+assert(src.includes('async function withBusy('));
+assert(src.includes('function wireOverlay('));
+assert(src.includes("document.visibilityState!=='hidden'"));
+assert(src.includes("visibilityState==='visible'&&authState"));
+assert(!src.includes('eve-v52-'));
+console.log('v53 runtime polish source tests passed');

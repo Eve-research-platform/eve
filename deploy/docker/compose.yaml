@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: eve
+      POSTGRES_USER: eve
+      POSTGRES_PASSWORD: ${EVE_DATABASE_PASSWORD}
+    volumes:
+      - eve-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U eve -d eve"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  eve:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    image: eve:63.0.0
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8787:8787"
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 8787
+      RESEARCHOS_RELAY_DATA: /data/eve
+      EVE_DEPLOYMENT_MODE: organisation-cloud
+      EVE_CLOUD_PROVIDER: docker
+      EVE_STORAGE_PROFILE: docker-volume-postgres
+      EVE_STATE_BACKEND: postgres
+      PGHOST: postgres
+      PGPORT: 5432
+      PGDATABASE: eve
+      PGUSER: eve
+      PGPASSWORD: ${EVE_DATABASE_PASSWORD}
+    volumes:
+      - eve-data:/data/eve
+volumes:
+  eve-data:
+  eve-postgres:

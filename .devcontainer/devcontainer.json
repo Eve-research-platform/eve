@@ -1,0 +1,25 @@
+{
+  "name": "Eve development",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bookworm",
+  "postCreateCommand": "npm install --no-audit --no-fund",
+  "forwardPorts": [
+    8787
+  ],
+  "portsAttributes": {
+    "8787": {
+      "label": "Eve",
+      "onAutoForward": "openPreview"
+    }
+  },
+  "remoteEnv": {
+    "HOST": "0.0.0.0",
+    "PORT": "8787"
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "files.eol": "\n"
+      }
+    }
+  }
+}

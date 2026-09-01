@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Eve Navigation Companion",
+  "version": "1.2.0",
+  "description": "Shows Eve navigation research tasks on the website being tested and returns completion to Eve.",
+  "permissions": ["storage", "tabs"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "action": {
+    "default_title": "Eve Navigation Companion",
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "icons/eve-16.png",
+    "32": "icons/eve-32.png",
+    "48": "icons/eve-48.png",
+    "128": "icons/eve-128.png"
+  }
+}

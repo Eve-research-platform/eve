@@ -1,0 +1,7 @@
+'use strict';
+const assert=require('assert'),fs=require('fs'),path=require('path');
+const app=fs.readFileSync(path.join(__dirname,'..','app','app.js'),'utf8'),archive=fs.readFileSync(path.join(__dirname,'..','app','eve-archive-ops.js'),'utf8'),css=fs.readFileSync(path.join(__dirname,'..','app','styles.css'),'utf8'),ai=fs.readFileSync(path.join(__dirname,'..','lib','ai_gateway.js'),'utf8'),rt=fs.readFileSync(path.join(__dirname,'..','app','eve-v53-runtime.js'),'utf8');
+assert(app.includes("h==='/settings'"));assert(app.includes("'/settings','settings','Settings'"));assert(app.includes('function globalSettingsPage()'));assert(app.includes('NEW STUDY DEFAULTS'));assert(app.includes('AI PROVIDER'));assert(app.includes('User roles'));
+assert(app.includes('function archiveStudy(id){return archiveOps.archiveStudy(id)}'));assert(app.includes('study-delete-icon'));assert(app.includes('ARCHIVE'));assert(archive.includes('relayUpdateLifecycle(s)'));assert(archive.includes('async function purgeArchivedStudy(id'));assert(app.includes('deleteResponseRecord:r=>idbDelete(RESPONSE_PREFIX+r.id)'));assert(app.includes('deleteRecordingRecord:id=>idbDelete(RECORDING_PREFIX+id)'));
+assert(ai.includes("'/api/ai/config'"));assert(ai.includes("createCipheriv('aes-256-gcm'"));assert(rt.includes('window.openEveTeamSettings'));assert(css.includes('global-settings-grid'));assert(css.includes('study-danger-zone'));
+console.log('v53.5 global settings + study deletion tests passed');
