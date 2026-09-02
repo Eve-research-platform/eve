@@ -38,7 +38,7 @@ const sha=v=>crypto.createHash('sha256').update(String(v||'')).digest('base64url
 
 function readJson(file,fallback=null){try{return JSON.parse(fs.readFileSync(file,'utf8'))}catch{return fallback}}
 function writeJsonAtomic(file,data){fs.mkdirSync(path.dirname(file),{recursive:true,mode:0o700});const tmp=`${file}.${process.pid}.${Date.now()}.tmp`;fs.writeFileSync(tmp,JSON.stringify(data),{mode:0o600});fs.renameSync(tmp,file);try{fs.chmodSync(file,0o600)}catch{}}
-function json(res,status,data){const payload=JSON.stringify(data);res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Content-Length':Buffer.byteLength(payload),'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer'});res.end(payload);return true}
+function json(res,status,data,extraHeaders={}){const payload=JSON.stringify(data);res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Content-Length':Buffer.byteLength(payload),'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer',...extraHeaders});res.end(payload);return true}
 function body(req,maxBytes=MAX_BODY){return new Promise((resolve,reject)=>{let size=0,parts=[];req.on('data',c=>{size+=c.length;if(size>maxBytes){reject(Object.assign(new Error('Body too large'),{status:413}));req.destroy();return}parts.push(c)});req.on('end',()=>{try{resolve(parts.length?JSON.parse(Buffer.concat(parts).toString('utf8')):{})}catch{reject(Object.assign(new Error('Invalid JSON'),{status:400}))}});req.on('error',reject)})}
 function adminOk(req,record){const token=req.headers['x-researchos-admin'];if(!token||!record?.adminHash)return false;const a=Buffer.from(sha(token)),b=Buffer.from(record.adminHash);return a.length===b.length&&crypto.timingSafeEqual(a,b)}
 function equalText(a,b){const x=Buffer.from(String(a||'')),y=Buffer.from(String(b||''));return x.length===y.length&&crypto.timingSafeEqual(x,y)}
@@ -78,8 +78,8 @@ async function api(req,res,url){
  const relayMatch=url.pathname.match(/^\/api\/studies\/([A-Za-z0-9_-]+)(?:\/|$)/);
  if(relayMatch&&stateStore.info().postgres&&!req.__eveRelayLocked){req.__eveRelayLocked=true;return stateStore.advisoryLock(`relay-study:${safeId(relayMatch[1])}`,()=>api(req,res,url))}
 
- if(url.pathname==='/api/health'&&req.method==='GET'){const readiness=liveSecurity.readiness(),database=await stateStore.health();return json(res,database.ok?200:503,{ok:database.ok,mode:'zero-access-relay',now:Date.now(),liveMode:readiness.liveMode,stateBackend:database.backend,database})}
- if(url.pathname==='/api/readiness'&&req.method==='GET'){const readiness=liveSecurity.readiness(),database=await stateStore.health(),ready=readiness.ready&&database.ok;return json(res,ready?200:503,{ok:ready,ready,liveMode:readiness.liveMode,stateBackend:database.backend,database})}
+ if(url.pathname==='/api/health'&&req.method==='GET'){const readiness=liveSecurity.readiness(),database=await stateStore.health();return json(res,database.ok?200:503,{ok:database.ok,mode:'zero-access-relay',now:Date.now(),liveMode:readiness.liveMode,stateBackend:database.backend,database},{'Access-Control-Allow-Origin':'*','Cross-Origin-Resource-Policy':'cross-origin'})}
+ if(url.pathname==='/api/readiness'&&req.method==='GET'){const readiness=liveSecurity.readiness(),database=await stateStore.health(),ready=readiness.ready&&database.ok;return json(res,ready?200:503,{ok:ready,ready,liveMode:readiness.liveMode,stateBackend:database.backend,database,checks:readiness.checks},{'Access-Control-Allow-Origin':'*','Cross-Origin-Resource-Policy':'cross-origin'})}
 
  let m=url.pathname.match(/^\/api\/studies\/([A-Za-z0-9_-]+)$/);
  if(m){
